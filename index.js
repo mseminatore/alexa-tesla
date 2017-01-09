@@ -189,7 +189,7 @@ app.intent('climateStopIntent', {
 //
 //
 app.intent('BeepIntent', {
-    "utterances": ['{to|} honk {the|} horn']
+    "utterances": ['{to|} {beep|honk} {the horn|}', ]
 }, function(req, res){
     tjs.honkHornAsync(options)
     .done(function(result) {
@@ -203,8 +203,24 @@ app.intent('BeepIntent', {
 //
 //
 //
+app.intent('ChargeQueryIntent', {
+    "utterances": ['{|What is|What\'s|For|To get} {the|} charge {level|limit|setting}']
+}, function(req, res){
+    chargeStateCall()
+    .done(function(chargeState) {
+        var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
 app.intent('ChargeLimitIntent', {
-    "slots": { "number": "AMAZON.NUMBER", "preset": "CHARGE_PRESETS" },
+    "slots": { "number": "NUMBER", "preset": "CHARGE_PRESETS" },
     "utterances": ['{to|} set {the|} charge limit to {50-100|number}', '{to|} set {the|} charge limit to {-|preset}']
 }, function(req, res){
     var limit = req.slot("number");
