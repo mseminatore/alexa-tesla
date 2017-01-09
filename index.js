@@ -19,8 +19,15 @@ var token = process.env.TOKEN;
 //
 //
 function log(str) {
-    if (process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production')
+    if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production')
         console.log(str);
+}
+
+//
+//
+//
+function f2c(degf) {
+    return (degf - 32) * 5 / 9;
 }
 
 /*
@@ -46,8 +53,8 @@ app.launch(function(req, res) {
         tjs.loginAsync(username, password)
         .then(vehiclesCall)
         .done(function(result) {
-            log("prompt");
-            log(options);
+//            log("prompt");
+//            log(options);
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
@@ -209,6 +216,25 @@ app.intent('ChargeQueryIntent', {
     chargeStateCall()
     .done(function(chargeState) {
         var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
+app.intent('setTempsIntent', {
+    "slots": { "number": "NUMBER"},
+    "utterances": ['{to|} set temperature to {64-80|number}']
+}, function(req, res){
+    var temp = req.slot("number");
+
+    tjs.setTempsAsync(options, f2c(temp), null)
+    .done(function(result) {
+        var str = "The temperature is now set to " + temp + " degrees";
         res.say(str).send();
     });
 
