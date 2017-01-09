@@ -195,6 +195,25 @@ app.intent('climateStopIntent', {
 //
 //
 //
+app.intent('setTempsIntent', {
+    "slots": { "number": "NUMBER"},
+    "utterances": ['{to|} set temperature to {64-80|number}']
+}, function(req, res){
+    var temp = req.slot("number");
+
+    tjs.setTempsAsync(options, f2c(temp), null)
+    .done(function(result) {
+        var str = "The temperature is now set to " + temp + " degrees";
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
 app.intent('BeepIntent', {
     "utterances": ['{to|} {beep|honk} {the horn|}', ]
 }, function(req, res){
@@ -210,14 +229,26 @@ app.intent('BeepIntent', {
 //
 //
 //
-app.intent('ChargeQueryIntent', {
-    "utterances": ['{|What is|What\'s|For|To get} {the|} charge {level|limit|setting}']
+app.intent('LockIntent', {
+    "slots": { "state": "LOCK_PRESETS" },
+    "utterances": ['{to|} {-|state} {the|} {door|doors|car}']
 }, function(req, res){
-    chargeStateCall()
-    .done(function(chargeState) {
-        var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
-        res.say(str).send();
-    });
+    var state = req.slot("state");
+
+    if (state == 'lock') {
+        tjs.doorLockAsync(options)
+        .done(function(result) {
+            res.say("The doors are now locked.").send();
+        });
+    } else if (state == 'unlock') {
+        tjs.doorUnlockAsync(options)
+        .done(function(result) {
+            res.say("The doors are now unlocked.").send();
+        });
+    } else {
+        res.say("Unknown request");
+        return true;
+    }
 
     // signal that we will send the response asynchronously    
     return false;
@@ -226,15 +257,12 @@ app.intent('ChargeQueryIntent', {
 //
 //
 //
-app.intent('setTempsIntent', {
-    "slots": { "number": "NUMBER"},
-    "utterances": ['{to|} set temperature to {64-80|number}']
+app.intent('ChargeQueryIntent', {
+    "utterances": ['{|What is|What\'s|For|To get} {the|} charge {level|limit|setting}']
 }, function(req, res){
-    var temp = req.slot("number");
-
-    tjs.setTempsAsync(options, f2c(temp), null)
-    .done(function(result) {
-        var str = "The temperature is now set to " + temp + " degrees";
+    chargeStateCall()
+    .done(function(chargeState) {
+        var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
         res.say(str).send();
     });
 
