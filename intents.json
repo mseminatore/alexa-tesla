@@ -1,0 +1,71 @@
+{
+  "intents": [
+    {
+      "intent": "BatteryIntent",
+      "slots": []
+    },
+    {
+      "intent": "PluggedInIntent",
+      "slots": []
+    },
+    {
+      "intent": "StartChargeIntent",
+      "slots": []
+    },
+    {
+      "intent": "StopChargeIntent",
+      "slots": []
+    },
+    {
+      "intent": "climateStartIntent",
+      "slots": []
+    },
+    {
+      "intent": "climateStopIntent",
+      "slots": []
+    },
+    {
+      "intent": "setTempsIntent",
+      "slots": [
+        {
+          "name": "number",
+          "type": "NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "BeepIntent",
+      "slots": []
+    },
+    {
+      "intent": "LockIntent",
+      "slots": [
+        {
+          "name": "state",
+          "type": "LOCK_PRESETS"
+        }
+      ]
+    },
+    {
+      "intent": "OdoIntent",
+      "slots": []
+    },
+    {
+      "intent": "ChargeQueryIntent",
+      "slots": []
+    },
+    {
+      "intent": "ChargeLimitIntent",
+      "slots": [
+        {
+          "name": "number",
+          "type": "NUMBER"
+        },
+        {
+          "name": "preset",
+          "type": "CHARGE_PRESETS"
+        }
+      ]
+    }
+  ]
+}

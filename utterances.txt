@@ -1,0 +1,170 @@
+BatteryIntent	the battery level
+BatteryIntent	What is the battery level
+BatteryIntent	What's the battery level
+BatteryIntent	For the battery level
+BatteryIntent	To get the battery level
+BatteryIntent	battery level
+BatteryIntent	What is battery level
+BatteryIntent	What's battery level
+BatteryIntent	For battery level
+BatteryIntent	To get battery level
+BatteryIntent	the charge
+BatteryIntent	What is the charge
+BatteryIntent	What's the charge
+BatteryIntent	For the charge
+BatteryIntent	To get the charge
+BatteryIntent	charge
+BatteryIntent	What is charge
+BatteryIntent	What's charge
+BatteryIntent	For charge
+BatteryIntent	To get charge
+BatteryIntent	the power
+BatteryIntent	What is the power
+BatteryIntent	What's the power
+BatteryIntent	For the power
+BatteryIntent	To get the power
+BatteryIntent	power
+BatteryIntent	What is power
+BatteryIntent	What's power
+BatteryIntent	For power
+BatteryIntent	To get power
+BatteryIntent	the soc
+BatteryIntent	What is the soc
+BatteryIntent	What's the soc
+BatteryIntent	For the soc
+BatteryIntent	To get the soc
+BatteryIntent	soc
+BatteryIntent	What is soc
+BatteryIntent	What's soc
+BatteryIntent	For soc
+BatteryIntent	To get soc
+PluggedInIntent	If car is plugged in
+PluggedInIntent	whether car is plugged in
+PluggedInIntent	If the car is plugged in
+PluggedInIntent	whether the car is plugged in
+PluggedInIntent	If my car is plugged in
+PluggedInIntent	whether my car is plugged in
+StartChargeIntent	to start charging
+StartChargeIntent	start charging
+StartChargeIntent	to charge
+StartChargeIntent	charge
+StopChargeIntent	to stop charging
+StopChargeIntent	stop charging
+climateStartIntent	to start climate
+climateStartIntent	start climate
+climateStartIntent	to start cooling
+climateStartIntent	start cooling
+climateStartIntent	to start heating
+climateStartIntent	start heating
+climateStartIntent	to start warming
+climateStartIntent	start warming
+climateStopIntent	to stop climate
+climateStopIntent	stop climate
+climateStopIntent	to stop cooling
+climateStopIntent	stop cooling
+climateStopIntent	to stop heating
+climateStopIntent	stop heating
+climateStopIntent	to stop warming
+climateStopIntent	stop warming
+setTempsIntent	to set temperature to {seventy|number}
+setTempsIntent	set temperature to {seventy one|number}
+setTempsIntent	to set temperature to {seventy two|number}
+setTempsIntent	set temperature to {seventy three|number}
+setTempsIntent	to set temperature to {seventy four|number}
+setTempsIntent	set temperature to {seventy five|number}
+setTempsIntent	to set temperature to {seventy six|number}
+setTempsIntent	set temperature to {seventy seven|number}
+setTempsIntent	to set temperature to {seventy eight|number}
+setTempsIntent	set temperature to {seventy nine|number}
+setTempsIntent	to set temperature to {eighty|number}
+setTempsIntent	set temperature to {sixty four|number}
+setTempsIntent	to set temperature to {sixty five|number}
+setTempsIntent	set temperature to {sixty six|number}
+setTempsIntent	to set temperature to {sixty seven|number}
+setTempsIntent	set temperature to {sixty eight|number}
+setTempsIntent	to set temperature to {sixty nine|number}
+BeepIntent	to beep the horn
+BeepIntent	beep the horn
+BeepIntent	to honk the horn
+BeepIntent	honk the horn
+BeepIntent	to beep
+BeepIntent	beep
+BeepIntent	to honk
+BeepIntent	honk
+LockIntent	to {state} the door
+LockIntent	{state} the door
+LockIntent	to {state} door
+LockIntent	{state} door
+LockIntent	to {state} the doors
+LockIntent	{state} the doors
+LockIntent	to {state} doors
+LockIntent	{state} doors
+LockIntent	to {state} the car
+LockIntent	{state} the car
+LockIntent	to {state} car
+LockIntent	{state} car
+OdoIntent	the odometer
+OdoIntent	What is the odometer
+OdoIntent	What's the odometer
+OdoIntent	For the odometer
+OdoIntent	To get the odometer
+OdoIntent	odometer
+OdoIntent	What is odometer
+OdoIntent	What's odometer
+OdoIntent	For odometer
+OdoIntent	To get odometer
+OdoIntent	the mileage
+OdoIntent	What is the mileage
+OdoIntent	What's the mileage
+OdoIntent	For the mileage
+OdoIntent	To get the mileage
+OdoIntent	mileage
+OdoIntent	What is mileage
+OdoIntent	What's mileage
+OdoIntent	For mileage
+OdoIntent	To get mileage
+ChargeQueryIntent	the charge level
+ChargeQueryIntent	What is the charge level
+ChargeQueryIntent	What's the charge level
+ChargeQueryIntent	For the charge level
+ChargeQueryIntent	To get the charge level
+ChargeQueryIntent	charge level
+ChargeQueryIntent	What is charge level
+ChargeQueryIntent	What's charge level
+ChargeQueryIntent	For charge level
+ChargeQueryIntent	To get charge level
+ChargeQueryIntent	the charge limit
+ChargeQueryIntent	What is the charge limit
+ChargeQueryIntent	What's the charge limit
+ChargeQueryIntent	For the charge limit
+ChargeQueryIntent	To get the charge limit
+ChargeQueryIntent	charge limit
+ChargeQueryIntent	What is charge limit
+ChargeQueryIntent	What's charge limit
+ChargeQueryIntent	For charge limit
+ChargeQueryIntent	To get charge limit
+ChargeQueryIntent	the charge setting
+ChargeQueryIntent	What is the charge setting
+ChargeQueryIntent	What's the charge setting
+ChargeQueryIntent	For the charge setting
+ChargeQueryIntent	To get the charge setting
+ChargeQueryIntent	charge setting
+ChargeQueryIntent	What is charge setting
+ChargeQueryIntent	What's charge setting
+ChargeQueryIntent	For charge setting
+ChargeQueryIntent	To get charge setting
+ChargeLimitIntent	to set the charge limit to {eighty|number}
+ChargeLimitIntent	set the charge limit to {eighty five|number}
+ChargeLimitIntent	to set charge limit to {ninety|number}
+ChargeLimitIntent	set charge limit to {ninety five|number}
+ChargeLimitIntent	to set the charge limit to {one hundred|number}
+ChargeLimitIntent	set the charge limit to {fifty|number}
+ChargeLimitIntent	to set charge limit to {fifty five|number}
+ChargeLimitIntent	set charge limit to {sixty|number}
+ChargeLimitIntent	to set the charge limit to {sixty five|number}
+ChargeLimitIntent	set the charge limit to {seventy|number}
+ChargeLimitIntent	to set charge limit to {seventy five|number}
+ChargeLimitIntent	to set the charge limit to {preset}
+ChargeLimitIntent	set the charge limit to {preset}
+ChargeLimitIntent	to set charge limit to {preset}
+ChargeLimitIntent	set charge limit to {preset}

@@ -1,0 +1,4 @@
+{
+	"CHARGE_PRESETS": ['standard', 'storage', 'range'],
+	"LOCK_PRESETS": ['lock', 'unlock']
+}
