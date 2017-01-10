@@ -257,6 +257,22 @@ app.intent('LockIntent', {
 //
 //
 //
+app.intent('OdoIntent', {
+    "utterances": ['{|What is|What\'s|For|To get} {the|} {odometer|mileage}']
+}, function(req, res){
+    tjs.vehicleStateAsync(options)
+    .done(function(vehicleState) {
+        var str = "The odometer reports " + vehicleState.odometer + " miles";
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
 app.intent('ChargeQueryIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} charge {level|limit|setting}']
 }, function(req, res){
@@ -275,8 +291,8 @@ app.intent('ChargeQueryIntent', {
 //
 app.intent('ChargeLimitIntent', {
     "slots": { "number": "NUMBER", "preset": "CHARGE_PRESETS" },
-    "utterances": ['{to|} set {the|} charge limit to {50-100|number}', '{to|} set {the|} charge limit to {-|preset}']
-}, function(req, res){
+    "utterances": ['{to|} set {the|} charge limit to {50-100 by 5|number}', '{to|} set {the|} charge limit to {-|preset}']
+}, function(req, res) {
     var limit = req.slot("number");
     var preset = req.slot("preset");
 
