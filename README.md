@@ -31,10 +31,12 @@ In order to test this app locally you will need to install the Alexa-Server proj
 
 # Warranty Disclaimer
 
-You may use this skill with the understanding that doing so is **AT YOUR OWN RISK**.  No warranty, express or implied, 
-is made with regards to the fitness or safety of this code for any purpose.  If you use this library to query or change 
-settings of your vehicle you understand that it is possible to make changes that could inadvertently lower the security 
-of your vehicle, or cause damage, through actions including but not limited to:
+You may use this skill with the understanding that doing so is **AT YOUR OWN RISK**.
+No warranty, express or implied, is made with regards to the fitness or safety of 
+this code for any purpose.  If you use this library to query or change settings of 
+your vehicle you understand that it is possible to make changes that could 
+inadvertently lower the security of your vehicle, or cause damage, through actions 
+including but not limited to:
 
 * Unlocking the vehicle
 * Remotely starting the vehicle
@@ -57,6 +59,8 @@ This skill currently supports the following intents:
 * Get battery level
 * Check if vehicle is plugged in
 
+The goal is to support all Tesla REST API capabilities that make sense.  Additionally, some new behaviors
+could be created such as charge scheduling, reminders, etc.
 
 # Utterances
 
