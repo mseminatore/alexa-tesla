@@ -3,6 +3,7 @@
 var tjs = require("teslajs");
 var _ = require('lodash');
 var Alexa = require('alexa-app');
+var request = require('request');
 
 // Allow this module to be reloaded by hotswap when changed
 module.change_code = 1;
@@ -33,6 +34,45 @@ function f2c(degf) {
     return (degf - 32) * 5 / 9;
 }
 
+//
+//  Turn compass heading into friendly heading (NSEW, etc.)
+//
+function compassDirs(heading) {
+    if (heading > 337 || heading < 23) {
+        return "North";
+    }
+
+    if (heading < 67) {
+        return "North East";
+    }
+
+    if (heading < 112) {
+        return "East";
+    }
+
+    if (heading < 157) {
+        return "South East";
+    }
+
+    if (heading < 202) {
+        return "South";
+    }
+
+    if (heading < 247) {
+        return "South West";
+    }
+
+    if (heading < 292) {
+        return "West";
+    }
+
+    if (heading < 337) {
+        return "North West";
+    }
+
+    return heading;
+}
+
 /*
 //
 // TODO verify the appID = amzn1.ask.skill.xxx 
@@ -56,8 +96,6 @@ app.launch(function(req, res) {
         tjs.loginAsync(username, password)
         .then(vehiclesCall)
         .done(function(result) {
-//            log("prompt");
-//            log(options);
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
@@ -103,11 +141,26 @@ function chargeStateCall(vehicle) {
 //
 //
 app.intent('BatteryIntent', {
-    "utterances": ['{|What is|What\'s|For|To get} {the|} {battery level|charge|power|soc}']
+    "utterances": ['{|What is|What\'s|For|To get} {|the|my} {battery level|charge|power|soc}']
 }, function(req, res){
     chargeStateCall()
     .done(function(chargeState) {
-        res.say("The battery level is " + chargeState.battery_level + "%").send();
+        res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
+app.intent('RangeIntent', {
+    "utterances": ['{|What is|What\'s|For|To get} {the|} range']
+}, function(req, res){
+    chargeStateCall()
+    .done(function(chargeState) {
+        res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
     });
 
     // signal that we will send the response asynchronously    
@@ -234,7 +287,7 @@ app.intent('BeepIntent', {
 //
 app.intent('LockIntent', {
     "slots": { "state": "LOCK_PRESETS" },
-    "utterances": ['{to|} {-|state} {the|} {door|doors|car}']
+    "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']
 }, function(req, res){
     var state = req.slot("state");
 
@@ -265,7 +318,7 @@ app.intent('OdoIntent', {
 }, function(req, res){
     tjs.vehicleStateAsync(options)
     .done(function(vehicleState) {
-        var str = "The odometer reports " + vehicleState.odometer + " miles";
+        var str = "The odometer reports " + Math.round(vehicleState.odometer) + " miles";
         res.say(str).send();
     });
 
@@ -294,7 +347,7 @@ app.intent('ChargeQueryIntent', {
 //
 app.intent('ChargeLimitIntent', {
     "slots": { "number": "NUMBER", "preset": "CHARGE_PRESETS" },
-    "utterances": ['{to|} set {the|} charge limit to {50-100 by 5|number}', '{to|} set {the|} charge limit to {-|preset}']
+    "utterances": ['{to|} set {the|} charge {limit|level} to {50-100 by 5|number}', '{to|} set {the|} charge {limit|level} to {-|preset}']
 }, function(req, res) {
     var limit = req.slot("number");
     var preset = req.slot("preset");
@@ -326,6 +379,51 @@ app.intent('ChargeLimitIntent', {
     tjs.setChargeLimitAsync(options, limit)
     .done(function(result) {
         var str = "I've set the charge limit to " + limit + "%";
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
+app.intent('LocationIntent', {
+    "utterances": ['{|Where is|Where\'s} {the|my} car']
+}, function(req, res){
+    tjs.driveStateAsync(options)
+    .done(function(driveState) {
+        var state = driveState.shift_state || "Parked";
+        var str ="";
+        var dir = compassDirs(driveState.heading);
+        var lat = driveState.latitude || 0;
+        var long = driveState.longitude || 0;
+/*
+        request({
+            method: 'GET',
+            url: "http://api.geonames.org/findNearestAddressJSON?lat=" + lat + "&lng=" + long + "&username=demo",
+            headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        }, function (error, response, body) {
+            var loc = JSON.parse(body).address;
+
+            var address = loc.streetNumber + " " + loc.street + " " + loc.placename + " " + loc.adminCode1;
+
+            if (state == "Parked") {
+                str = "Car is parked facing " + dir + "near " + address;
+            } else {
+                str = "Car is traveling " + dir + " at " + driveState.speed + " miles per hour near " + address;
+            }
+
+            res.say(str).send();
+        });
+*/
+        if (state == "Parked") {
+            str = "Car is parked facing " + dir;
+        } else {
+            str = "Car is traveling " + dir + " at " + Math.round(driveState.speed) + " miles per hour";
+        }
+
         res.say(str).send();
     });
 

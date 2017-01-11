@@ -5,6 +5,10 @@
       "slots": []
     },
     {
+      "intent": "RangeIntent",
+      "slots": []
+    },
+    {
       "intent": "PluggedInIntent",
       "slots": []
     },
@@ -66,6 +70,10 @@
           "type": "CHARGE_PRESETS"
         }
       ]
+    },
+    {
+      "intent": "LocationIntent",
+      "slots": []
     }
   ]
 }

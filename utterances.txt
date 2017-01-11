@@ -1,43 +1,73 @@
-BatteryIntent	the battery level
-BatteryIntent	What is the battery level
-BatteryIntent	What's the battery level
-BatteryIntent	For the battery level
-BatteryIntent	To get the battery level
 BatteryIntent	battery level
 BatteryIntent	What is battery level
 BatteryIntent	What's battery level
 BatteryIntent	For battery level
 BatteryIntent	To get battery level
-BatteryIntent	the charge
-BatteryIntent	What is the charge
-BatteryIntent	What's the charge
-BatteryIntent	For the charge
-BatteryIntent	To get the charge
+BatteryIntent	the battery level
+BatteryIntent	What is the battery level
+BatteryIntent	What's the battery level
+BatteryIntent	For the battery level
+BatteryIntent	To get the battery level
+BatteryIntent	my battery level
+BatteryIntent	What is my battery level
+BatteryIntent	What's my battery level
+BatteryIntent	For my battery level
+BatteryIntent	To get my battery level
 BatteryIntent	charge
 BatteryIntent	What is charge
 BatteryIntent	What's charge
 BatteryIntent	For charge
 BatteryIntent	To get charge
-BatteryIntent	the power
-BatteryIntent	What is the power
-BatteryIntent	What's the power
-BatteryIntent	For the power
-BatteryIntent	To get the power
+BatteryIntent	the charge
+BatteryIntent	What is the charge
+BatteryIntent	What's the charge
+BatteryIntent	For the charge
+BatteryIntent	To get the charge
+BatteryIntent	my charge
+BatteryIntent	What is my charge
+BatteryIntent	What's my charge
+BatteryIntent	For my charge
+BatteryIntent	To get my charge
 BatteryIntent	power
 BatteryIntent	What is power
 BatteryIntent	What's power
 BatteryIntent	For power
 BatteryIntent	To get power
-BatteryIntent	the soc
-BatteryIntent	What is the soc
-BatteryIntent	What's the soc
-BatteryIntent	For the soc
-BatteryIntent	To get the soc
+BatteryIntent	the power
+BatteryIntent	What is the power
+BatteryIntent	What's the power
+BatteryIntent	For the power
+BatteryIntent	To get the power
+BatteryIntent	my power
+BatteryIntent	What is my power
+BatteryIntent	What's my power
+BatteryIntent	For my power
+BatteryIntent	To get my power
 BatteryIntent	soc
 BatteryIntent	What is soc
 BatteryIntent	What's soc
 BatteryIntent	For soc
 BatteryIntent	To get soc
+BatteryIntent	the soc
+BatteryIntent	What is the soc
+BatteryIntent	What's the soc
+BatteryIntent	For the soc
+BatteryIntent	To get the soc
+BatteryIntent	my soc
+BatteryIntent	What is my soc
+BatteryIntent	What's my soc
+BatteryIntent	For my soc
+BatteryIntent	To get my soc
+RangeIntent	the range
+RangeIntent	What is the range
+RangeIntent	What's the range
+RangeIntent	For the range
+RangeIntent	To get the range
+RangeIntent	range
+RangeIntent	What is range
+RangeIntent	What's range
+RangeIntent	For range
+RangeIntent	To get range
 PluggedInIntent	If car is plugged in
 PluggedInIntent	whether car is plugged in
 PluggedInIntent	If the car is plugged in
@@ -108,18 +138,24 @@ BeepIntent	to beep
 BeepIntent	beep
 BeepIntent	to honk
 BeepIntent	honk
-LockIntent	to {state} the door
-LockIntent	{state} the door
 LockIntent	to {state} door
 LockIntent	{state} door
-LockIntent	to {state} the doors
-LockIntent	{state} the doors
+LockIntent	to {state} the door
+LockIntent	{state} the door
+LockIntent	to {state} my door
+LockIntent	{state} my door
 LockIntent	to {state} doors
 LockIntent	{state} doors
-LockIntent	to {state} the car
-LockIntent	{state} the car
+LockIntent	to {state} the doors
+LockIntent	{state} the doors
+LockIntent	to {state} my doors
+LockIntent	{state} my doors
 LockIntent	to {state} car
 LockIntent	{state} car
+LockIntent	to {state} the car
+LockIntent	{state} the car
+LockIntent	to {state} my car
+LockIntent	{state} my car
 OdoIntent	the odometer
 OdoIntent	What is the odometer
 OdoIntent	What's the odometer
@@ -174,47 +210,101 @@ ChargeLimitIntent	to set the charge limit to {fifty|number}
 ChargeLimitIntent	set the charge limit to {fifty|number}
 ChargeLimitIntent	to set charge limit to {fifty|number}
 ChargeLimitIntent	set charge limit to {fifty|number}
+ChargeLimitIntent	to set the charge level to {fifty|number}
+ChargeLimitIntent	set the charge level to {fifty|number}
+ChargeLimitIntent	to set charge level to {fifty|number}
+ChargeLimitIntent	set charge level to {fifty|number}
 ChargeLimitIntent	to set the charge limit to {fifty five|number}
 ChargeLimitIntent	set the charge limit to {fifty five|number}
 ChargeLimitIntent	to set charge limit to {fifty five|number}
 ChargeLimitIntent	set charge limit to {fifty five|number}
+ChargeLimitIntent	to set the charge level to {fifty five|number}
+ChargeLimitIntent	set the charge level to {fifty five|number}
+ChargeLimitIntent	to set charge level to {fifty five|number}
+ChargeLimitIntent	set charge level to {fifty five|number}
 ChargeLimitIntent	to set the charge limit to {sixty|number}
 ChargeLimitIntent	set the charge limit to {sixty|number}
 ChargeLimitIntent	to set charge limit to {sixty|number}
 ChargeLimitIntent	set charge limit to {sixty|number}
+ChargeLimitIntent	to set the charge level to {sixty|number}
+ChargeLimitIntent	set the charge level to {sixty|number}
+ChargeLimitIntent	to set charge level to {sixty|number}
+ChargeLimitIntent	set charge level to {sixty|number}
 ChargeLimitIntent	to set the charge limit to {sixty five|number}
 ChargeLimitIntent	set the charge limit to {sixty five|number}
 ChargeLimitIntent	to set charge limit to {sixty five|number}
 ChargeLimitIntent	set charge limit to {sixty five|number}
+ChargeLimitIntent	to set the charge level to {sixty five|number}
+ChargeLimitIntent	set the charge level to {sixty five|number}
+ChargeLimitIntent	to set charge level to {sixty five|number}
+ChargeLimitIntent	set charge level to {sixty five|number}
 ChargeLimitIntent	to set the charge limit to {seventy|number}
 ChargeLimitIntent	set the charge limit to {seventy|number}
 ChargeLimitIntent	to set charge limit to {seventy|number}
 ChargeLimitIntent	set charge limit to {seventy|number}
+ChargeLimitIntent	to set the charge level to {seventy|number}
+ChargeLimitIntent	set the charge level to {seventy|number}
+ChargeLimitIntent	to set charge level to {seventy|number}
+ChargeLimitIntent	set charge level to {seventy|number}
 ChargeLimitIntent	to set the charge limit to {seventy five|number}
 ChargeLimitIntent	set the charge limit to {seventy five|number}
 ChargeLimitIntent	to set charge limit to {seventy five|number}
 ChargeLimitIntent	set charge limit to {seventy five|number}
+ChargeLimitIntent	to set the charge level to {seventy five|number}
+ChargeLimitIntent	set the charge level to {seventy five|number}
+ChargeLimitIntent	to set charge level to {seventy five|number}
+ChargeLimitIntent	set charge level to {seventy five|number}
 ChargeLimitIntent	to set the charge limit to {eighty|number}
 ChargeLimitIntent	set the charge limit to {eighty|number}
 ChargeLimitIntent	to set charge limit to {eighty|number}
 ChargeLimitIntent	set charge limit to {eighty|number}
+ChargeLimitIntent	to set the charge level to {eighty|number}
+ChargeLimitIntent	set the charge level to {eighty|number}
+ChargeLimitIntent	to set charge level to {eighty|number}
+ChargeLimitIntent	set charge level to {eighty|number}
 ChargeLimitIntent	to set the charge limit to {eighty five|number}
 ChargeLimitIntent	set the charge limit to {eighty five|number}
 ChargeLimitIntent	to set charge limit to {eighty five|number}
 ChargeLimitIntent	set charge limit to {eighty five|number}
+ChargeLimitIntent	to set the charge level to {eighty five|number}
+ChargeLimitIntent	set the charge level to {eighty five|number}
+ChargeLimitIntent	to set charge level to {eighty five|number}
+ChargeLimitIntent	set charge level to {eighty five|number}
 ChargeLimitIntent	to set the charge limit to {ninety|number}
 ChargeLimitIntent	set the charge limit to {ninety|number}
 ChargeLimitIntent	to set charge limit to {ninety|number}
 ChargeLimitIntent	set charge limit to {ninety|number}
+ChargeLimitIntent	to set the charge level to {ninety|number}
+ChargeLimitIntent	set the charge level to {ninety|number}
+ChargeLimitIntent	to set charge level to {ninety|number}
+ChargeLimitIntent	set charge level to {ninety|number}
 ChargeLimitIntent	to set the charge limit to {ninety five|number}
 ChargeLimitIntent	set the charge limit to {ninety five|number}
 ChargeLimitIntent	to set charge limit to {ninety five|number}
 ChargeLimitIntent	set charge limit to {ninety five|number}
+ChargeLimitIntent	to set the charge level to {ninety five|number}
+ChargeLimitIntent	set the charge level to {ninety five|number}
+ChargeLimitIntent	to set charge level to {ninety five|number}
+ChargeLimitIntent	set charge level to {ninety five|number}
 ChargeLimitIntent	to set the charge limit to {one hundred|number}
 ChargeLimitIntent	set the charge limit to {one hundred|number}
 ChargeLimitIntent	to set charge limit to {one hundred|number}
 ChargeLimitIntent	set charge limit to {one hundred|number}
+ChargeLimitIntent	to set the charge level to {one hundred|number}
+ChargeLimitIntent	set the charge level to {one hundred|number}
+ChargeLimitIntent	to set charge level to {one hundred|number}
+ChargeLimitIntent	set charge level to {one hundred|number}
 ChargeLimitIntent	to set the charge limit to {preset}
 ChargeLimitIntent	set the charge limit to {preset}
 ChargeLimitIntent	to set charge limit to {preset}
 ChargeLimitIntent	set charge limit to {preset}
+ChargeLimitIntent	to set the charge level to {preset}
+ChargeLimitIntent	set the charge level to {preset}
+ChargeLimitIntent	to set charge level to {preset}
+ChargeLimitIntent	set charge level to {preset}
+LocationIntent	the car
+LocationIntent	Where is the car
+LocationIntent	Where's the car
+LocationIntent	my car
+LocationIntent	Where is my car
+LocationIntent	Where's my car
