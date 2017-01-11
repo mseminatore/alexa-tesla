@@ -9,6 +9,9 @@ module.change_code = 1;
 
 var app = new Alexa.app('tesla');
 
+// tell alexa-app to be sure to fully expand utterance generation!
+app.exhaustiveUtterances = true;
+
 var options = {};
 
 var username = process.env.USER;
