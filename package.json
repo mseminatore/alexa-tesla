@@ -1,7 +1,7 @@
 {
-  "name": "Tesla",
-  "version": "1.0.0",
-  "description": "Tesla Alexa Skill",
+  "name": "alexa-tesla",
+  "version": "0.0.1",
+  "description": "Tesla Skill for Alexa",
   "main": "index.js",
   "scripts": {
     "test": "mocha"

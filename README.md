@@ -1,5 +1,5 @@
 # Alexa-Tesla
-Alexa Skills Kit (ASK) project - Monitoring and control of Tesla vehicles
+Alexa Skills Kit (ASK) project - Monitoring and control of Tesla vehicles using Amazon Echo devices
 
 # Installation
 
@@ -17,13 +17,19 @@ Remember to install the project dependencies via npm.  From the root level of th
 # Setup
 
 Currently you must set this skill up by creating your own AWS Lambda function.  Simply ZIP up the directory
-contents and upload to a new AWS Lambda function.
+contents and upload to a new AWS Lambda function.  While Alexa skills can also be served from other services such
+as Microsoft Azure I have not yet personally tested this configuration and so cannot provide instructions.
 
 At some point I hope to enable account linking support.  For now you must setup your AWS Lambda function to
 provide either:
 
 1. Two environment variables called `USER` and `PASS` which contain your Tesla.com credentials.
 2. OR one environment variable called `TOKEN` which contains a valid Tesla.com OAuth token [**Recommended**]
+
+While using option #1 above works it is less secure to use your login credentials.  Unlike logon credentials
+an OAuth token will eventually expire, and can be revoked at any time by changing your account password.  Additionally
+using the username and password requires an extra call on each skill invocation to acquire a new OAuth token.  These
+calls not only put undue load on the Tesla servers but are also relatively slow.
 
 # Testing
 
@@ -64,4 +70,21 @@ could be created such as charge scheduling, reminders, etc.
 
 # Utterances
 
-TBD
+The complete set of recognized utterances and custom types can be found in [utterances.txt](https://github.com/mseminatore/alexa-tesla/blob/master/utterances.txt) 
+and [customTypes.json](https://github.com/mseminatore/alexa-tesla/blob/master/customTypes.json).
+
+Some examples utterances are provided below:
+
+"[Alexa] ask Tesla..."
+
+* What is the battery level
+* What is the range
+* If my car is plugged in
+* to start warming
+* to set temperature to 67
+* to beep the horn
+* to lock the doors
+* What is the mileage
+* What is the charge level
+* to set the charge limit to standard
+* Where is my car
