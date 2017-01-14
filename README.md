@@ -1,4 +1,7 @@
 # Alexa-Tesla
+[![Version](http://img.shields.io/npm/v/alexa-tesla.png)](https://www.npmjs.org/package/alexa-tesla)
+[![License](https://img.shields.io/npm/l/alexa-tesla.svg)](https://github.com/mseminatore/alexa-esla/blob/master/LICENSE)
+
 Alexa Skills Kit (ASK) project - Monitoring and control of Tesla vehicles using Amazon Echo devices
 
 # Installation
@@ -25,6 +28,7 @@ provide either:
 
 1. Two environment variables called `USER` and `PASS` which contain your Tesla.com credentials.
 2. OR one environment variable called `TOKEN` which contains a valid Tesla.com OAuth token [**Recommended**]
+
 
 While using option #1 above works it is less secure to use your login credentials.  Unlike logon credentials
 an OAuth token will eventually expire, and can be revoked at any time by changing your account password.  Additionally
