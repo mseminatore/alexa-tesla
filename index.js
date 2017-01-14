@@ -18,6 +18,7 @@ var options = {};
 var username = process.env.USER;
 var password = process.env.PASS;
 var token = process.env.TOKEN;
+var appid = process.env.APPID || 0;
 
 //
 //
@@ -73,23 +74,24 @@ function compassDirs(heading) {
     return heading;
 }
 
-/*
 //
-// TODO verify the appID = amzn1.ask.skill.xxx 
+// Verify the requester appID = amzn1.ask.skill.xxx 
 //
 app.pre = function(request, response, type) {
-  if (process.env.NODE_ENV == 'production' && request.applicationId != "amzn1.ask.skill.xxx") {
+  if (appid && process.env.NODE_ENV == 'production' && request.applicationId != appid) {
     // fail ungracefully
     log("Invalid applicationId");
     response.fail("Invalid applicationId");
   }
 };
-*/
 
+//
+//
+//
 app.launch(function(req, res) {
 
     var prompt = 'What would you like to do?';
-    
+
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
@@ -102,19 +104,21 @@ app.launch(function(req, res) {
         return false;
     }
     
+    log(req.sessionDetails.accessToken);
+
     // if a token was provided then use that otherwise use account linking
     if (token) {
         log("token found in process env");
         vehiclesCall({authToken: token})
-        .then(function(result){
+        .done(function(vehicle) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
         return false;
-    } else if (req.session.user.accessToken) {
+    } else if (req.sessionDetails.accessToken) {
         log("token passed by Alexa");
-        vehiclesCall({authToken: req.session.user.accessToken})
-        .then(function(result){
+        vehiclesCall({authToken: req.sessionDetails.accessToken})
+        .done(function(result) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
 
