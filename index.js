@@ -1,9 +1,9 @@
 "use strict";
 
 var tjs = require("teslajs");
-var _ = require('lodash');
+//var _ = require('lodash');
 var Alexa = require('alexa-app');
-var request = require('request');
+//var request = require('request');
 
 // Allow this module to be reloaded by hotswap when changed
 module.change_code = 1;
@@ -13,23 +13,26 @@ var app = new Alexa.app('tesla');
 // tell alexa-app to be sure to fully expand utterance generation!
 app.exhaustiveUtterances = true;
 
+// TODO - this could/should? be a session prop instead?
 var options = {};
 
+// ENV variables used for configuration
 var username = process.env.USER;
 var password = process.env.PASS;
 var token = process.env.TOKEN;
 var appid = process.env.APPID || 0;
 
 //
-//
+//  Might be overthinking the toggles here
 //
 function log(str) {
-    if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production')
+    if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production') {
         console.log(str);
+    }
 }
 
 //
-//
+// Convert fahrenheit to celcius
 //
 function f2c(degf) {
     return (degf - 32) * 5 / 9;
@@ -129,6 +132,9 @@ app.launch(function(req, res) {
     }
 });
 
+//
+// TODO - see if we can make this inline instead
+//
 function vehiclesCall(result) {
     log("logged in: " + result.authToken);
     options = {authToken: result.authToken};
@@ -137,6 +143,9 @@ function vehiclesCall(result) {
     return tjs.vehiclesAsync(options);
 }
 
+//
+//  TODO - this can probably just be called inline
+//
 function chargeStateCall(vehicle) {
     return tjs.chargeStateAsync(options);
 }
@@ -401,9 +410,10 @@ app.intent('LocationIntent', {
         var state = driveState.shift_state || "Parked";
         var str ="";
         var dir = compassDirs(driveState.heading);
+/*
         var lat = driveState.latitude || 0;
         var long = driveState.longitude || 0;
-/*
+
         request({
             method: 'GET',
             url: "http://api.geonames.org/findNearestAddressJSON?lat=" + lat + "&lng=" + long + "&username=demo",
