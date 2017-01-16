@@ -11,19 +11,26 @@ module.change_code = 1;
 var app = new Alexa.app('tesla');
 
 // tell alexa-app to be sure to fully expand utterance generation!
+// TODO - this may NOT actually be required OR desirable
 app.exhaustiveUtterances = true;
 
 // TODO - this could/should? be a session prop instead?
 var options = {};
 
 // ENV variables used for configuration
+
+// set these if you are using username/password auth [NOT RECOMMENDED for security!]
 var username = process.env.USER;
 var password = process.env.PASS;
+
+// set this if you are using a Tesla acquired OAuth token
 var token = process.env.TOKEN;
+
+// set this if you want to have the code verify the AppID
 var appid = process.env.APPID || 0;
 
 //
-//  Might be overthinking the toggles here
+//  Might be overthinking the env toggles here
 //
 function log(str) {
     if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production') {
@@ -82,6 +89,7 @@ function compassDirs(heading) {
 //
 app.pre = function(request, response, type) {
   if (appid && process.env.NODE_ENV == 'production' && request.applicationId != appid) {
+
     // fail ungracefully
     log("Invalid applicationId");
     response.fail("Invalid applicationId");
