@@ -1,6 +1,6 @@
 {
   "name": "alexa-tesla",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Tesla Skill for Alexa",
   "main": "index.js",
   "scripts": {
