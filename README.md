@@ -4,6 +4,8 @@
 
 Alexa Skills Kit (ASK) project - Monitoring and control of Tesla vehicles using Amazon Echo devices
 
+[![NPM](https://nodei.co/npm/alexa-tesla.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/alexa-tesla/)
+
 # Installation
 
 In order to create your Alexa skill you must first download and install [NodeJS](http://nodejs.org).
