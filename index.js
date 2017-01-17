@@ -306,6 +306,21 @@ app.intent('BeepIntent', {
 //
 //
 //
+app.intent('FlashIntent', {
+    "utterances": ['{to|} flash {the lights|}', ]
+}, function(req, res){
+    tjs.flashLightsAsync(options)
+    .done(function(result) {
+        res.say("Don't blink or you might miss it?").send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
 app.intent('LockIntent', {
     "slots": { "state": "LOCK_PRESETS" },
     "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']

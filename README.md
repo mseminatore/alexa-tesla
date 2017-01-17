@@ -45,7 +45,7 @@ services such as Microsoft Azure I have not yet personally tested these configur
 provide instructions.
 
 While I do have account linking support working in the project and have an account linking website established
-I am unclear on whether this would be OK with Tesla Motors.  My strong preference would be for them to 
+it is unclear whether this would be OK with Tesla Motors.  My strong preference would be for them to 
 officially support account linking scenarios via their own website.  So for now you must setup your 
 AWS Lambda function to provide either:
 
