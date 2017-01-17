@@ -55,9 +55,7 @@ AWS Lambda function to provide either:
 >Note that environment variables are case sensitive.  I was caught by this several times during development!
 
 While using option #1 above works it is far less secure to use your login credentials.  Unlike logon credentials
-an OAuth token will eventually expire, and can be revoked at any time by changing your account password.  Additionally 
-using the username and password requires an extra call on each skill invocation to acquire a new OAuth token.  
-These calls not only put undue load on the Tesla servers but are also relatively slow.
+an OAuth token will eventually expire, and can be revoked at any time by changing your account password.  Additionally using the username and password requires an extra call on each skill invocation to acquire a new OAuth token.  These calls not only put undue load on the Tesla servers but they are also relatively slow.
 
 # Testing
 
@@ -92,6 +90,7 @@ This skill currently supports the following intents:
 * Start/stop climate system
 * Set climate temperature
 * Beep the horn
+* Flash the lights
 * Get the odometer reading
 * Get the current battery-level/range
 * Check if vehicle is plugged in
