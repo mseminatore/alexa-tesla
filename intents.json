@@ -42,6 +42,10 @@
       "slots": []
     },
     {
+      "intent": "FlashIntent",
+      "slots": []
+    },
+    {
       "intent": "LockIntent",
       "slots": [
         {

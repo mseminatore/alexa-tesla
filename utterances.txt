@@ -138,6 +138,10 @@ BeepIntent	to beep
 BeepIntent	beep
 BeepIntent	to honk
 BeepIntent	honk
+FlashIntent	to flash the lights
+FlashIntent	flash the lights
+FlashIntent	to flash
+FlashIntent	flash
 LockIntent	to {state} door
 LockIntent	{state} door
 LockIntent	to {state} the door
