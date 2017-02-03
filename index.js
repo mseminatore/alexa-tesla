@@ -115,8 +115,6 @@ app.launch(function(req, res) {
         return false;
     }
     
-    log(req.sessionDetails.accessToken);
-
     // if a token was provided then use that otherwise use account linking
     if (token) {
         log("token found in process env");
@@ -128,6 +126,8 @@ app.launch(function(req, res) {
         return false;
     } else if (req.sessionDetails.accessToken) {
         log("token passed by Alexa");
+        log(req.sessionDetails.accessToken);
+        
         vehiclesCall({authToken: req.sessionDetails.accessToken})
         .done(function(result) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
