@@ -45,6 +45,10 @@ function f2c(degf) {
     return (degf - 32) * 5 / 9;
 }
 
+function c2f(degc) {
+    return degc * 9 / 5 + 32;
+}
+
 //
 //  Turn compass heading into friendly heading (NSEW, etc.)
 //
@@ -127,7 +131,7 @@ app.launch(function(req, res) {
     } else if (req.sessionDetails.accessToken) {
         log("token passed by Alexa");
         log(req.sessionDetails.accessToken);
-        
+
         vehiclesCall({authToken: req.sessionDetails.accessToken})
         .done(function(result) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
@@ -157,6 +161,56 @@ function vehiclesCall(result) {
 function chargeStateCall(vehicle) {
     return tjs.chargeStateAsync(options);
 }
+
+//
+//
+//
+function getTeslaModel(vehicle) {
+    var carType = "Unknown";
+    if (vehicle.option_codes.indexOf("MDLX") != -1) {
+        carType = "Model X";
+    } else {
+        carType = "Model S";
+    }
+
+    return carType;
+}
+
+//
+//
+//
+app.intent('VehicleCountIntent', {
+    "utterances": ['How many {cars|vehicles} do I {have|own}']
+}, function(req, res){
+    tjs.allVehiclesAsync(options)
+    .done(function(vehicles) {
+        var str = "I see that you have " + vehicles.length;
+        if (vehicles.length > 1) {
+            str += " vehicles. ";
+        } else {
+            str += " vehicle. ";
+        }
+
+        str += "A " + getTeslaModel(vehicles[0]);
+
+        if (vehicles[0].display_name) {
+            str += " called " + vehicles[0].display_name;
+        }
+
+        for (var i = 1; i < vehicles.length; i++) {
+            str += " and a " + getTeslaModel(vehicles[i]);
+
+            if (vehicles[i].display_name) {
+                str += " called " + vehicles[i].display_name;
+            }
+        }
+
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
 
 //
 //
@@ -366,12 +420,46 @@ app.intent('OdoIntent', {
 //
 //
 app.intent('ChargeQueryIntent', {
-    "utterances": ['{|What is|What\'s|For|To get} {the|} charge {level|limit|setting}']
+    "utterances": ['{|What is|What\'s|For|To get} {the|} charge {|level|limit|setting}']
 }, function(req, res){
     chargeStateCall()
     .done(function(chargeState) {
         var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
         res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
+app.intent('ChargeTimeIntent', {
+    "utterances": ['How {long|much time} until {charge|charging} {is done|completes|finishes}']
+}, function(req, res){
+    chargeStateCall()
+    .done(function(chargeState) {
+        if (chargeState.charging_state != "Charging") {
+            res.say("The car is not currently charging.").send();
+        } else {
+            var hours = Math.floor(chargeState.time_to_full_charge);
+            var mins = Math.round((chargeState.time_to_full_charge - hours) * 60);
+            var mph = Math.round(chargeState.charge_rate);
+
+            var str = "The car is currently charging at a rate of " + mph.toString() + " miles per hour.  The estimated time to finish charging to " + chargeState.charge_limit_soc + "% is ";
+            if (hours > 0) {
+                str += hours.toString();
+                if (hours > 1) {
+                    str += " hours ";
+                } else {
+                    str += " hour ";
+                }
+            }
+
+            str += mins.toString() + " minutes.";
+            res.say(str).send();
+        }
     });
 
     // signal that we will send the response asynchronously    

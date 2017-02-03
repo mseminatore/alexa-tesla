@@ -1,6 +1,10 @@
 {
   "intents": [
     {
+      "intent": "VehicleCountIntent",
+      "slots": []
+    },
+    {
       "intent": "BatteryIntent",
       "slots": []
     },
@@ -60,6 +64,10 @@
     },
     {
       "intent": "ChargeQueryIntent",
+      "slots": []
+    },
+    {
+      "intent": "ChargeTimeIntent",
       "slots": []
     },
     {

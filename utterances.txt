@@ -1,3 +1,7 @@
+VehicleCountIntent	How many cars do I have
+VehicleCountIntent	How many vehicles do I have
+VehicleCountIntent	How many cars do I own
+VehicleCountIntent	How many vehicles do I own
 BatteryIntent	battery level
 BatteryIntent	What is battery level
 BatteryIntent	What's battery level
@@ -180,6 +184,16 @@ OdoIntent	What is mileage
 OdoIntent	What's mileage
 OdoIntent	For mileage
 OdoIntent	To get mileage
+ChargeQueryIntent	the charge
+ChargeQueryIntent	What is the charge
+ChargeQueryIntent	What's the charge
+ChargeQueryIntent	For the charge
+ChargeQueryIntent	To get the charge
+ChargeQueryIntent	charge
+ChargeQueryIntent	What is charge
+ChargeQueryIntent	What's charge
+ChargeQueryIntent	For charge
+ChargeQueryIntent	To get charge
 ChargeQueryIntent	the charge level
 ChargeQueryIntent	What is the charge level
 ChargeQueryIntent	What's the charge level
@@ -210,6 +224,18 @@ ChargeQueryIntent	What is charge setting
 ChargeQueryIntent	What's charge setting
 ChargeQueryIntent	For charge setting
 ChargeQueryIntent	To get charge setting
+ChargeTimeIntent	How long until charge is done
+ChargeTimeIntent	How much time until charge is done
+ChargeTimeIntent	How long until charging is done
+ChargeTimeIntent	How much time until charging is done
+ChargeTimeIntent	How long until charge completes
+ChargeTimeIntent	How much time until charge completes
+ChargeTimeIntent	How long until charging completes
+ChargeTimeIntent	How much time until charging completes
+ChargeTimeIntent	How long until charge finishes
+ChargeTimeIntent	How much time until charge finishes
+ChargeTimeIntent	How long until charging finishes
+ChargeTimeIntent	How much time until charging finishes
 ChargeLimitIntent	to set the charge limit to {fifty|number}
 ChargeLimitIntent	set the charge limit to {fifty|number}
 ChargeLimitIntent	to set charge limit to {fifty|number}
