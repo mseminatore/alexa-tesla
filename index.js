@@ -180,7 +180,7 @@ function getTeslaModel(vehicle) {
 //
 //
 app.intent('VehicleCountIntent', {
-    "utterances": ['How many {cars|vehicles} do I {have|own}']
+    "utterances": ['How many {cars|vehicles} do I {have|own}', 'to list my {cars|vehicles}']
 }, function(req, res){
     tjs.allVehiclesAsync(options)
     .done(function(vehicles) {
@@ -191,14 +191,19 @@ app.intent('VehicleCountIntent', {
             str += " vehicle. ";
         }
 
-        str += "A " + getTeslaModel(vehicles[0]);
+        for (var i = 0; i < vehicles.length; i++) {
+            if (i == 0) {
+                str += "A ";
+            } else {
+                str += " and a ";
+            }
 
-        if (vehicles[0].display_name) {
-            str += " called " + vehicles[0].display_name;
-        }
+            var paintColor = tjs.getPaintColor(vehicles[i]);
+            if (paintColor) {
+                str += paintColor + " ";
+            }
 
-        for (var i = 1; i < vehicles.length; i++) {
-            str += " and a " + getTeslaModel(vehicles[i]);
+            str += tjs.getModel(vehicles[i]);
 
             if (vehicles[i].display_name) {
                 str += " called " + vehicles[i].display_name;
@@ -216,7 +221,7 @@ app.intent('VehicleCountIntent', {
 //
 //
 app.intent('BatteryIntent', {
-    "utterances": ['{|What is|What\'s|For|To get} {|the|my} {battery level|charge|power|soc}']
+    "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}']
 }, function(req, res){
     chargeStateCall()
     .done(function(chargeState) {
@@ -231,7 +236,7 @@ app.intent('BatteryIntent', {
 //
 //
 app.intent('RangeIntent', {
-    "utterances": ['{|What is|What\'s|For|To get} {the|} range']
+    "utterances": ['{What is|What\'s|For|To get} the range']
 }, function(req, res){
     chargeStateCall()
     .done(function(chargeState) {

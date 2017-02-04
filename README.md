@@ -2,7 +2,7 @@
 [![Version](http://img.shields.io/npm/v/alexa-tesla.png)](https://www.npmjs.org/package/alexa-tesla)
 [![License](https://img.shields.io/npm/l/alexa-tesla.svg)](https://github.com/mseminatore/alexa-esla/blob/master/LICENSE)
 
-Alexa Skills Kit (ASK) project - Monitoring and control of Tesla vehicles using Amazon Echo devices
+Monitoring and control of Tesla vehicles using Amazon Echo devices using the Alexa Skills Kit (ASK).
 
 [![NPM](https://nodei.co/npm/alexa-tesla.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/alexa-tesla/)
 
@@ -78,9 +78,15 @@ including but not limited to:
 * Lowering the battery charge level
 * Impacting the long-term health of your battery
 
+# What's New!
+
+Here are some of the most recent features and fixes:
+
+1. In **0.0.10** added support for **charge time remaining** and **listing vehicles**
+
 # Supported Alexa Intents
 
-`Intents` is just another name for functions or behaviors exposed by an Alexa skill.
+The term `Intents` is just another name for functions or behaviors exposed by an Alexa skill.
 
 This skill currently supports the following intents:
 
@@ -94,6 +100,8 @@ This skill currently supports the following intents:
 * Get the odometer reading
 * Get the current battery-level/range
 * Check if vehicle is plugged in
+* Check the charge time remaining
+* List the vehicles attached to your account
 
 The basic goal is to support all of Tesla REST API capabilities that make sense.  If there is functionality
 that you would like to see exposed please let us know.
@@ -125,3 +133,5 @@ Some examples utterances are provided below:
 * What is the charge level
 * to set the charge limit to standard
 * Where is my car
+* How long until charging is done
+* How many cars do I own
