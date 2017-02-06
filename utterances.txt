@@ -70,6 +70,11 @@ climateStopIntent	to stop warming
 climateStopIntent	stop warming
 setTempsIntent	to set temperature to {number}
 setTempsIntent	set temperature to {number}
+setTempsIntent	to set temperature to {number} degrees
+setTempsIntent	set temperature to {number} degrees
+climateSettingIntent	What are the climate settings
+climateSettingIntent	For the climate settings
+climateSettingIntent	To get the climate settings
 BeepIntent	to beep the horn
 BeepIntent	beep the horn
 BeepIntent	to honk the horn

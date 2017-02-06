@@ -45,6 +45,9 @@ function f2c(degf) {
     return (degf - 32) * 5 / 9;
 }
 
+//
+// Convert celcius to fahrenheit
+//
 function c2f(degc) {
     return degc * 9 / 5 + 32;
 }
@@ -165,20 +168,6 @@ function chargeStateCall(vehicle) {
 //
 //
 //
-function getTeslaModel(vehicle) {
-    var carType = "Unknown";
-    if (vehicle.option_codes.indexOf("MDLX") != -1) {
-        carType = "Model X";
-    } else {
-        carType = "Model S";
-    }
-
-    return carType;
-}
-
-//
-//
-//
 app.intent('VehicleCountIntent', {
     "utterances": ['How many {cars|vehicles} do I {have|own}', 'to list my {cars|vehicles}']
 }, function(req, res){
@@ -192,7 +181,7 @@ app.intent('VehicleCountIntent', {
         }
 
         for (var i = 0; i < vehicles.length; i++) {
-            if (i == 0) {
+            if (i === 0) {
                 str += "A ";
             } else {
                 str += " and a ";
@@ -248,7 +237,7 @@ app.intent('RangeIntent', {
 });
 
 //
-//
+// Check whether the car is plugged in or not
 //
 app.intent('PluggedInIntent', {
     "utterances": ['{If|whether} {|the|my} car is plugged in']
@@ -269,7 +258,7 @@ app.intent('PluggedInIntent', {
 });
 
 //
-//
+// Start charging the car
 //
 app.intent('StartChargeIntent', {
     "utterances": ['{to|} {start charging|charge}']
@@ -284,7 +273,7 @@ app.intent('StartChargeIntent', {
 });
 
 //
-//
+// Stop charging the car
 //
 app.intent('StopChargeIntent', {
     "utterances": ['{to|} stop charging']
@@ -299,7 +288,7 @@ app.intent('StopChargeIntent', {
 });
 
 //
-//
+// Turn on the climate system
 //
 app.intent('climateStartIntent', {
     "utterances": ['{to|} start {climate|cooling|heating|warming}']
@@ -314,7 +303,7 @@ app.intent('climateStartIntent', {
 });
 
 //
-//
+// Turn off the climate system
 //
 app.intent('climateStopIntent', {
     "utterances": ['{to|} stop {climate|cooling|heating|warming}']
@@ -329,11 +318,11 @@ app.intent('climateStopIntent', {
 });
 
 //
-//
+// Set the climate temperatures
 //
 app.intent('setTempsIntent', {
     "slots": { "number": "AMAZON.NUMBER"},
-    "utterances": ['{to|} set temperature to {-|number}']
+    "utterances": ['{to|} set temperature to {-|number} {|degrees}']
 }, function(req, res){
     var temp = req.slot("number");
     // TODO - clamp temp here?
@@ -349,7 +338,31 @@ app.intent('setTempsIntent', {
 });
 
 //
+// Climate settings
 //
+app.intent('climateSettingIntent', {
+    "utterances": ['{What are|For|To get} the climate settings']
+}, function(req, res){
+    tjs.climateStateAsync(options)
+    .done(function(climate_state) {
+        var state = climate_state.is_auto_conditioning_on ? "on" : "off";
+        var str = "The climate system is currently " + state + ". ";
+        
+        if (climate_state.driver_temp_setting != climate_state.passenger_temp_setting ) {
+            str += "The driver temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees ";
+            str += "and the passenger temperature is set to " + Math.round(c2f(climate_state.passenger_temp_setting)) + " degrees.";
+        } else {
+            str += "The temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees.";
+        }
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+// Honk the car horn
 //
 app.intent('BeepIntent', {
     "utterances": ['{to|} {beep|honk} {the horn|}', ]

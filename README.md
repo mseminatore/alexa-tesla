@@ -84,6 +84,7 @@ Here are some of the most recent features and fixes:
 
 1. In **0.0.10** added support for **charge time remaining** and **listing vehicles**
 2. In **0.0.12** added **valet mode** and **reset valet pin** intents and simplified utterances using Amazon custom types
+3. In **0.0.13** added **climate settings** intent
 
 # Intents
 
@@ -105,6 +106,7 @@ This skill currently supports the following intents:
 * List the vehicles attached to your account
 * Enable/disable valet mode [NEW!]
 * Reset the valet pin [NEW!]
+* Get the climate settings
 
 The goal is to eventually support all of the Tesla REST API capabilities that make sense.
 
@@ -145,3 +147,4 @@ Some examples utterances are provided below:
 * How many cars do I own
 * Turn valet mode on|off 1234
 * Reset the valet pin
+* What are the climate settings

@@ -42,6 +42,10 @@
       ]
     },
     {
+      "intent": "climateSettingIntent",
+      "slots": []
+    },
+    {
       "intent": "BeepIntent",
       "slots": []
     },
