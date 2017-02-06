@@ -25,14 +25,14 @@
   "author": "Mark Seminatore",
   "license": "MIT",
   "dependencies": {
-    "alexa-app": "^2.3.4",
+    "alexa-app": "^3.0.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "lodash": "^4.17.3",
     "mocha": "^3.2.0",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "teslajs": "^2.0.11"
+    "teslajs": "^2.1.6"
   },
   "devDependencies": {
     "jshint": "^2.9.4"
