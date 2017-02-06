@@ -109,7 +109,7 @@ app.pre = function(request, response, type) {
 app.launch(function(req, res) {
 
     var prompt = 'What would you like to do?';
-
+    
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
@@ -133,7 +133,7 @@ app.launch(function(req, res) {
         return false;
     } else if (req.sessionDetails.accessToken) {
         log("token passed by Alexa");
-        log(req.sessionDetails.accessToken);
+//        log(req.sessionDetails.accessToken);
 
         vehiclesCall({authToken: req.sessionDetails.accessToken})
         .done(function(result) {
@@ -151,18 +151,11 @@ app.launch(function(req, res) {
 // TODO - see if we can make this inline instead
 //
 function vehiclesCall(result) {
-    log("logged in: " + result.authToken);
+//    log("logged in: " + result.authToken);
     options = {authToken: result.authToken};
 
     log("vehiclesCall");
     return tjs.vehiclesAsync(options);
-}
-
-//
-//  TODO - this can probably just be called inline
-//
-function chargeStateCall(vehicle) {
-    return tjs.chargeStateAsync(options);
 }
 
 //
@@ -212,7 +205,7 @@ app.intent('VehicleCountIntent', {
 app.intent('BatteryIntent', {
     "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}']
 }, function(req, res){
-    chargeStateCall()
+    tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
     });
@@ -227,7 +220,7 @@ app.intent('BatteryIntent', {
 app.intent('RangeIntent', {
     "utterances": ['{What is|What\'s|For|To get} the range']
 }, function(req, res){
-    chargeStateCall()
+    tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
     });
@@ -242,7 +235,7 @@ app.intent('RangeIntent', {
 app.intent('PluggedInIntent', {
     "utterances": ['{If|whether} {|the|my} car is plugged in']
 }, function(req, res){
-    chargeStateCall()
+    tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "";
         if (chargeState.charging_state != "Disconnected") {
@@ -484,7 +477,7 @@ app.intent('OdoIntent', {
 app.intent('ChargeQueryIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} charge {|level|limit|setting}']
 }, function(req, res){
-    chargeStateCall()
+    tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
         res.say(str).send();
@@ -500,7 +493,7 @@ app.intent('ChargeQueryIntent', {
 app.intent('ChargeTimeIntent', {
     "utterances": ['How {long|much time} until {charge|charging} {is done|completes|finishes}']
 }, function(req, res){
-    chargeStateCall()
+    tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         if (chargeState.charging_state != "Charging") {
             res.say("The car is not currently charging.").send();
