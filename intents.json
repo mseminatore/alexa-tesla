@@ -37,7 +37,7 @@
       "slots": [
         {
           "name": "number",
-          "type": "NUMBER"
+          "type": "AMAZON.NUMBER"
         }
       ]
     },
@@ -59,6 +59,23 @@
       ]
     },
     {
+      "intent": "ValetIntent",
+      "slots": [
+        {
+          "name": "onoff",
+          "type": "ONOFF"
+        },
+        {
+          "name": "pin",
+          "type": "AMAZON.FOUR_DIGIT_NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "ResetValetPinIntent",
+      "slots": []
+    },
+    {
       "intent": "OdoIntent",
       "slots": []
     },
@@ -75,7 +92,7 @@
       "slots": [
         {
           "name": "number",
-          "type": "NUMBER"
+          "type": "AMAZON.NUMBER"
         },
         {
           "name": "preset",

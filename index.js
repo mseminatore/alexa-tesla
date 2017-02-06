@@ -332,10 +332,11 @@ app.intent('climateStopIntent', {
 //
 //
 app.intent('setTempsIntent', {
-    "slots": { "number": "NUMBER"},
-    "utterances": ['{to|} set temperature to {64-80|number}']
+    "slots": { "number": "AMAZON.NUMBER"},
+    "utterances": ['{to|} set temperature to {-|number}']
 }, function(req, res){
     var temp = req.slot("number");
+    // TODO - clamp temp here?
 
     tjs.setTempsAsync(options, f2c(temp), null)
     .done(function(result) {
@@ -400,6 +401,49 @@ app.intent('LockIntent', {
         res.say("Unknown request");
         return true;
     }
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+// Valet mode
+//
+app.intent('ValetIntent', {
+    "slots": { "onoff": "ONOFF" , "pin": "AMAZON.FOUR_DIGIT_NUMBER"},
+    "utterances": ['{|to} {Turn|Set} valet mode {-|onoff} {-|pin}']
+}, function(req, res) {
+    var onoff = req.slot("onoff");
+    var pin = req.slot("pin");
+    var mode = false;
+
+    if (onoff.toUpperCase() == "ON") {
+        mode = true;
+    } else {
+        mode = false;
+    }
+
+    tjs.setValetModeAsync(options, mode, pin)
+    .done(function(result) {
+        var str = "Valet mode is now " + onoff;
+        res.say(str).send();
+    });
+
+    // signal that we will send the response asynchronously    
+    return false;
+});
+
+//
+//
+//
+app.intent('ResetValetPinIntent', {
+    "utterances": ['{|to} reset {|the} valet pin']
+}, function(req, res){
+    tjs.resetValetPinAsync(options)
+    .done(function(result) {
+        var str = "The valet pin has been reset.";
+        res.say(str).send();
+    });
 
     // signal that we will send the response asynchronously    
     return false;
@@ -475,8 +519,8 @@ app.intent('ChargeTimeIntent', {
 //
 //
 app.intent('ChargeLimitIntent', {
-    "slots": { "number": "NUMBER", "preset": "CHARGE_PRESETS" },
-    "utterances": ['{to|} set {the|} charge {limit|level} to {50-100 by 5|number}', '{to|} set {the|} charge {limit|level} to {-|preset}']
+    "slots": { "number": "AMAZON.NUMBER", "preset": "CHARGE_PRESETS" },
+    "utterances": ['{to|} set {the|} charge {limit|level} to {-|number}', '{to|} set {the|} charge {limit|level} to {-|preset}']
 }, function(req, res) {
     var limit = req.slot("number");
     var preset = req.slot("preset");

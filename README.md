@@ -83,8 +83,9 @@ including but not limited to:
 Here are some of the most recent features and fixes:
 
 1. In **0.0.10** added support for **charge time remaining** and **listing vehicles**
+2. In **0.0.12** added **valet mode** and **reset valet pin** intents and simplified utterances using Amazon custom types
 
-# Supported Alexa Intents
+# Intents
 
 The term `Intents` is just another name for functions or behaviors exposed by an Alexa skill.
 
@@ -102,16 +103,23 @@ This skill currently supports the following intents:
 * Check if vehicle is plugged in
 * Check the charge time remaining
 * List the vehicles attached to your account
+* Enable/disable valet mode [NEW!]
+* Reset the valet pin [NEW!]
 
-The basic goal is to support all of Tesla REST API capabilities that make sense.  If there is functionality
-that you would like to see exposed please let us know.
+The goal is to eventually support all of the Tesla REST API capabilities that make sense.
+
+> If there is functionality that you would like to see exposed please let us know.
 
 Additionally, some new behaviors may be created such as charge scheduling, reminders, etc.
 
+The complete set of intents can be found in
+[intents.json](https://github.com/mseminatore/alexa-tesla/blob/master/intents.json) 
+
 # Utterances
 
-`Utterances` is the term for the specific phrases that an Alexa skill can recognize.  All utterances are
-eventually mapped to intents.  Many utterances can, and very often do, map to a single intent.
+The term `Utterances` represents the set of specific phrases that an Alexa skill can recognize.  
+All utterances are eventually mapped to `intents`.  Many utterances can, and very often do, map 
+to a single intent.
 
 The complete set of recognized utterances and custom types can typically be found in 
 [utterances.txt](https://github.com/mseminatore/alexa-tesla/blob/master/utterances.txt) 
@@ -135,3 +143,5 @@ Some examples utterances are provided below:
 * Where is my car
 * How long until charging is done
 * How many cars do I own
+* Turn valet mode on|off 1234
+* Reset the valet pin
