@@ -98,8 +98,8 @@ app.pre = function(request, response, type) {
   if (appid && process.env.NODE_ENV == 'production' && request.applicationId != appid) {
 
     // fail ungracefully
-    log("Invalid applicationId");
-    response.fail("Invalid applicationId");
+    log("Error: Invalid applicationId");
+    response.fail("Error: Invalid applicationId");
   }
 };
 
@@ -109,7 +109,7 @@ app.pre = function(request, response, type) {
 app.launch(function(req, res) {
 
     var prompt = 'What would you like to do?';
-    
+  
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
@@ -163,7 +163,7 @@ function vehiclesCall(result) {
 //
 app.intent('VehicleCountIntent', {
     "utterances": ['How many {cars|vehicles} do I {have|own}', 'to list my {cars|vehicles}']
-}, function(req, res){
+}, function(req, res) {
     tjs.allVehiclesAsync(options)
     .done(function(vehicles) {
         var str = "I see that you have " + vehicles.length;
@@ -204,7 +204,7 @@ app.intent('VehicleCountIntent', {
 //
 app.intent('BatteryIntent', {
     "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}']
-}, function(req, res){
+}, function(req, res ){
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
@@ -219,7 +219,7 @@ app.intent('BatteryIntent', {
 //
 app.intent('RangeIntent', {
     "utterances": ['{What is|What\'s|For|To get} the range']
-}, function(req, res){
+}, function(req, res) {
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
@@ -234,7 +234,7 @@ app.intent('RangeIntent', {
 //
 app.intent('PluggedInIntent', {
     "utterances": ['{If|whether} {|the|my} car is plugged in']
-}, function(req, res){
+}, function(req, res) {
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "";
@@ -255,7 +255,7 @@ app.intent('PluggedInIntent', {
 //
 app.intent('StartChargeIntent', {
     "utterances": ['{to|} {start charging|charge}']
-}, function(req, res){
+}, function(req, res) {
     tjs.startChargeAsync(options)
     .done(function(result) {
         res.say("Charging has begun").send();
@@ -270,7 +270,7 @@ app.intent('StartChargeIntent', {
 //
 app.intent('StopChargeIntent', {
     "utterances": ['{to|} stop charging']
-}, function(req, res){
+}, function(req, res) {
     tjs.stopChargeAsync(options)
     .done(function(result) {
         res.say("Charging has stopped").send();
@@ -285,7 +285,7 @@ app.intent('StopChargeIntent', {
 //
 app.intent('climateStartIntent', {
     "utterances": ['{to|} start {climate|cooling|heating|warming}']
-}, function(req, res){
+}, function(req, res) {
     tjs.climateStartAsync(options)
     .done(function(result) {
         res.say("Climate system is now on").send();
@@ -300,7 +300,7 @@ app.intent('climateStartIntent', {
 //
 app.intent('climateStopIntent', {
     "utterances": ['{to|} stop {climate|cooling|heating|warming}']
-}, function(req, res){
+}, function(req, res) {
     tjs.climateStopAsync(options)
     .done(function(result) {
         res.say("Climate system is now off").send();
@@ -316,7 +316,7 @@ app.intent('climateStopIntent', {
 app.intent('setTempsIntent', {
     "slots": { "number": "AMAZON.NUMBER"},
     "utterances": ['{to|} set temperature to {-|number} {|degrees}']
-}, function(req, res){
+}, function(req, res) {
     var temp = req.slot("number");
     // TODO - clamp temp here?
 
@@ -335,7 +335,7 @@ app.intent('setTempsIntent', {
 //
 app.intent('climateSettingIntent', {
     "utterances": ['{What are|For|To get} the climate settings']
-}, function(req, res){
+}, function(req, res) {
     tjs.climateStateAsync(options)
     .done(function(climate_state) {
         var state = climate_state.is_auto_conditioning_on ? "on" : "off";
@@ -358,8 +358,8 @@ app.intent('climateSettingIntent', {
 // Honk the car horn
 //
 app.intent('BeepIntent', {
-    "utterances": ['{to|} {beep|honk} {the horn|}', ]
-}, function(req, res){
+    "utterances": ['{to|} {beep|honk} {the horn|}']
+}, function(req, res) {
     tjs.honkHornAsync(options)
     .done(function(result) {
         res.say("Beep Beep did you hear it?").send();
@@ -373,8 +373,8 @@ app.intent('BeepIntent', {
 //
 //
 app.intent('FlashIntent', {
-    "utterances": ['{to|} flash {the lights|}', ]
-}, function(req, res){
+    "utterances": ['{to|} flash {the lights|}']
+}, function(req, res) {
     tjs.flashLightsAsync(options)
     .done(function(result) {
         res.say("Don't blink or you might miss it?").send();
@@ -390,7 +390,7 @@ app.intent('FlashIntent', {
 app.intent('LockIntent', {
     "slots": { "state": "LOCK_PRESETS" },
     "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']
-}, function(req, res){
+}, function(req, res) {
     var state = req.slot("state");
 
     if (state == 'lock') {
@@ -444,7 +444,7 @@ app.intent('ValetIntent', {
 //
 app.intent('ResetValetPinIntent', {
     "utterances": ['{|to} reset {|the} valet pin']
-}, function(req, res){
+}, function(req, res) {
     tjs.resetValetPinAsync(options)
     .done(function(result) {
         var str = "The valet pin has been reset.";
@@ -460,7 +460,7 @@ app.intent('ResetValetPinIntent', {
 //
 app.intent('OdoIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} {odometer|mileage}']
-}, function(req, res){
+}, function(req, res) {
     tjs.vehicleStateAsync(options)
     .done(function(vehicleState) {
         var str = "The odometer reports " + Math.round(vehicleState.odometer) + " miles";
@@ -476,7 +476,7 @@ app.intent('OdoIntent', {
 //
 app.intent('ChargeQueryIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} charge {|level|limit|setting}']
-}, function(req, res){
+}, function(req, res) {
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
@@ -492,7 +492,7 @@ app.intent('ChargeQueryIntent', {
 //
 app.intent('ChargeTimeIntent', {
     "utterances": ['How {long|much time} until {charge|charging} {is done|completes|finishes}']
-}, function(req, res){
+}, function(req, res) {
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         if (chargeState.charging_state != "Charging") {
@@ -570,7 +570,7 @@ app.intent('ChargeLimitIntent', {
 //
 app.intent('LocationIntent', {
     "utterances": ['{|Where is|Where\'s} {the|my} car']
-}, function(req, res){
+}, function(req, res) {
     tjs.driveStateAsync(options)
     .done(function(driveState) {
         var state = driveState.shift_state || "Parked";

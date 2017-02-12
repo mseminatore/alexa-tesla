@@ -7,7 +7,7 @@
     "test": "mocha"
   },
   "bugs": {
-    "url:": "https://github.com/mseminatore/alexa-tesla/issues"
+    "url": "https://github.com/mseminatore/alexa-tesla/issues"
   },
   "repository": {
     "type": "git",
