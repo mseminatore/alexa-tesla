@@ -108,11 +108,11 @@ app.launch(function(req, res) {
     var prompt = 'What would you like to do?';
 
     var session = req.getSession();
-  
+    var options = {};
+
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
-        var options = {};
 
         tjs.loginAsync(username, password)
         .then(function(result) {
@@ -133,7 +133,7 @@ app.launch(function(req, res) {
     if (token) {
         log("OAuth token found in process ENV");
 
-        var options = {authToken: token};
+        options = {authToken: token};
 
         tjs.vehiclesAsync(options)
         .done(function(vehicle) {
@@ -151,7 +151,7 @@ app.launch(function(req, res) {
         log("OAuth token passed by Alexa");
 //        log(req.sessionDetails.accessToken);
 
-        var options = {authToken: req.sessionDetails.accessToken};
+        options = {authToken: req.sessionDetails.accessToken};
 
         tjs.vehiclesAsync(options)
         .done(function(vehicle) {
