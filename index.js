@@ -112,9 +112,17 @@ app.launch(function(req, res) {
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
+        var options = {};
+
         tjs.loginAsync(username, password)
-        .then(vehiclesCall)
-        .done(function(vehicles) {
+        .then(function(result) {
+            options = {authToken: result.authToken};
+            return tjs.vehiclesAsync(options);
+        })
+        .done(function(vehicle) {
+            session.set("vehicle", vehicle);
+            session.set("options", options);
+
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
@@ -160,17 +168,6 @@ app.launch(function(req, res) {
     log("Account linking required");
     res.linkAccount();
 });
-
-//
-// TODO - see if we can make this inline instead
-//
-function vehiclesCall(result) {
-//    log("logged in: " + result.authToken);
-    options = {authToken: result.authToken};
-
-    log("vehiclesCall");
-    return tjs.vehiclesAsync(options);
-}
 
 //
 //
