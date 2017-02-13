@@ -14,9 +14,6 @@ var app = new Alexa.app('tesla');
 // TODO - this may NOT actually be required OR desirable
 app.exhaustiveUtterances = true;
 
-// TODO - this could/should? be a session prop instead?
-var options = {};
-
 // ENV variables used for configuration
 
 // set these if you are using username/password auth [NOT RECOMMENDED for security!]
@@ -109,42 +106,59 @@ app.pre = function(request, response, type) {
 app.launch(function(req, res) {
 
     var prompt = 'What would you like to do?';
+
+    var session = req.getSession();
   
     // if user/pass provided then login
     if (username && password) {
         log("username/pwd found");
         tjs.loginAsync(username, password)
         .then(vehiclesCall)
-        .done(function(result) {
+        .done(function(vehicles) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
         return false;
     }
     
-    // if a token was provided then use that otherwise use account linking
+    // if token found in ENV then use it
     if (token) {
-        log("token found in process env");
-        vehiclesCall({authToken: token})
+        log("OAuth token found in process ENV");
+
+        var options = {authToken: token};
+
+        tjs.vehiclesAsync(options)
         .done(function(vehicle) {
+            session.set("vehicle", vehicle);
+            session.set("options", options);
+
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
         
         return false;
-    } else if (req.sessionDetails.accessToken) {
-        log("token passed by Alexa");
+    }
+    
+    // if token passed in request then use that otherwise use account linking
+    if (req.sessionDetails.accessToken) {
+        log("OAuth token passed by Alexa");
 //        log(req.sessionDetails.accessToken);
 
-        vehiclesCall({authToken: req.sessionDetails.accessToken})
-        .done(function(result) {
+        var options = {authToken: req.sessionDetails.accessToken};
+
+        tjs.vehiclesAsync(options)
+        .done(function(vehicle) {
+            session.set("vehicle", vehicle);
+            session.set("options", options);
+
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         });
 
         return false;        
-    } else {
-        log("Account link required");
-        res.linkAccount();
     }
+
+    // must link accounts
+    log("Account linking required");
+    res.linkAccount();
 });
 
 //
@@ -164,6 +178,8 @@ function vehiclesCall(result) {
 app.intent('VehicleCountIntent', {
     "utterances": ['How many {cars|vehicles} do I {have|own}', 'to list my {cars|vehicles}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+
     tjs.allVehiclesAsync(options)
     .done(function(vehicles) {
         var str = "I see that you have " + vehicles.length;
@@ -205,6 +221,8 @@ app.intent('VehicleCountIntent', {
 app.intent('BatteryIntent', {
     "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}']
 }, function(req, res ){
+    var options = req.getSession().get("options");
+
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
@@ -220,6 +238,8 @@ app.intent('BatteryIntent', {
 app.intent('RangeIntent', {
     "utterances": ['{What is|What\'s|For|To get} the range']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
@@ -235,6 +255,8 @@ app.intent('RangeIntent', {
 app.intent('PluggedInIntent', {
     "utterances": ['{If|whether} {|the|my} car is plugged in']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "";
@@ -256,6 +278,8 @@ app.intent('PluggedInIntent', {
 app.intent('StartChargeIntent', {
     "utterances": ['{to|} {start charging|charge}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.startChargeAsync(options)
     .done(function(result) {
         res.say("Charging has begun").send();
@@ -271,6 +295,8 @@ app.intent('StartChargeIntent', {
 app.intent('StopChargeIntent', {
     "utterances": ['{to|} stop charging']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.stopChargeAsync(options)
     .done(function(result) {
         res.say("Charging has stopped").send();
@@ -286,6 +312,8 @@ app.intent('StopChargeIntent', {
 app.intent('climateStartIntent', {
     "utterances": ['{to|} start {climate|cooling|heating|warming}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.climateStartAsync(options)
     .done(function(result) {
         res.say("Climate system is now on").send();
@@ -301,6 +329,8 @@ app.intent('climateStartIntent', {
 app.intent('climateStopIntent', {
     "utterances": ['{to|} stop {climate|cooling|heating|warming}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.climateStopAsync(options)
     .done(function(result) {
         res.say("Climate system is now off").send();
@@ -320,6 +350,8 @@ app.intent('setTempsIntent', {
     var temp = req.slot("number");
     // TODO - clamp temp here?
 
+    var options = req.getSession().get("options");
+
     tjs.setTempsAsync(options, f2c(temp), null)
     .done(function(result) {
         var str = "The temperature is now set to " + temp + " degrees";
@@ -336,6 +368,8 @@ app.intent('setTempsIntent', {
 app.intent('climateSettingIntent', {
     "utterances": ['{What are|For|To get} the climate settings']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.climateStateAsync(options)
     .done(function(climate_state) {
         var state = climate_state.is_auto_conditioning_on ? "on" : "off";
@@ -360,6 +394,8 @@ app.intent('climateSettingIntent', {
 app.intent('BeepIntent', {
     "utterances": ['{to|} {beep|honk} {the horn|}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.honkHornAsync(options)
     .done(function(result) {
         res.say("Beep Beep did you hear it?").send();
@@ -375,6 +411,8 @@ app.intent('BeepIntent', {
 app.intent('FlashIntent', {
     "utterances": ['{to|} flash {the lights|}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.flashLightsAsync(options)
     .done(function(result) {
         res.say("Don't blink or you might miss it?").send();
@@ -392,6 +430,7 @@ app.intent('LockIntent', {
     "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']
 }, function(req, res) {
     var state = req.slot("state");
+    var options = req.getSession().get("options");
 
     if (state == 'lock') {
         tjs.doorLockAsync(options)
@@ -419,6 +458,8 @@ app.intent('ValetIntent', {
     "slots": { "onoff": "ONOFF" , "pin": "AMAZON.FOUR_DIGIT_NUMBER"},
     "utterances": ['{|to} {Turn|Set} valet mode {-|onoff} {-|pin}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     var onoff = req.slot("onoff");
     var pin = req.slot("pin");
     var mode = false;
@@ -445,6 +486,8 @@ app.intent('ValetIntent', {
 app.intent('ResetValetPinIntent', {
     "utterances": ['{|to} reset {|the} valet pin']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.resetValetPinAsync(options)
     .done(function(result) {
         var str = "The valet pin has been reset.";
@@ -461,6 +504,8 @@ app.intent('ResetValetPinIntent', {
 app.intent('OdoIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} {odometer|mileage}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.vehicleStateAsync(options)
     .done(function(vehicleState) {
         var str = "The odometer reports " + Math.round(vehicleState.odometer) + " miles";
@@ -477,6 +522,8 @@ app.intent('OdoIntent', {
 app.intent('ChargeQueryIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} charge {|level|limit|setting}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
@@ -493,6 +540,8 @@ app.intent('ChargeQueryIntent', {
 app.intent('ChargeTimeIntent', {
     "utterances": ['How {long|much time} until {charge|charging} {is done|completes|finishes}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.chargeStateAsync(options)
     .done(function(chargeState) {
         if (chargeState.charging_state != "Charging") {
@@ -528,6 +577,8 @@ app.intent('ChargeLimitIntent', {
     "slots": { "number": "AMAZON.NUMBER", "preset": "CHARGE_PRESETS" },
     "utterances": ['{to|} set {the|} charge {limit|level} to {-|number}', '{to|} set {the|} charge {limit|level} to {-|preset}']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     var limit = req.slot("number");
     var preset = req.slot("preset");
 
@@ -569,8 +620,10 @@ app.intent('ChargeLimitIntent', {
 //
 //
 app.intent('LocationIntent', {
-    "utterances": ['{|Where is|Where\'s} {the|my} car']
+    "utterances": ['{Where is|Where\'s} {the|my} car']
 }, function(req, res) {
+    var options = req.getSession().get("options");
+    
     tjs.driveStateAsync(options)
     .done(function(driveState) {
         var state = driveState.shift_state || "Parked";
