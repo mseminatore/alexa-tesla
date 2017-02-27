@@ -258,7 +258,7 @@ function getVehiclesFromToken(session, authToken) {
     return tjs.allVehiclesAsync(options)
     .then(function(vehicles) {
         vehicles[1] = {};
-        vehicles[1].id_s = "656623481448453599";
+        vehicles[1].id_s = vehicles[0].id_s;
         vehicles[1].display_name = "Tessie";
 
         session.set("vehicles", vehicles);
