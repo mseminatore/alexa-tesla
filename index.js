@@ -1,9 +1,10 @@
 "use strict";
 
-var tjs = require("teslajs");
 //var _ = require('lodash');
-var Alexa = require('alexa-app');
 //var request = require('request');
+var tjs = require("teslajs");
+var Alexa = require('alexa-app');
+var Levenshtein = require('levenshtein');
 
 // Allow this module to be reloaded by hotswap when changed
 module.change_code = 1;
@@ -27,7 +28,7 @@ var token = process.env.TOKEN;
 var appid = process.env.APPID || 0;
 
 //
-//  Might be overthinking the env toggles here
+//  Might be overthinking the ENV toggles here
 //
 function log(str) {
     if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'debug' || process.env.NODE_ENV != 'production') {
@@ -215,14 +216,84 @@ app.intent('VehicleCountIntent', {
 //
 //
 //
-app.intent('BatteryIntent', {
-    "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}']
-}, function(req, res ){
-    var options = req.getSession().get("options");
+function getOptionsFromCarName(session, carName) {
+    console.log("getOptionsFromCarName()");
 
-    tjs.chargeStateAsync(options)
-    .done(function(chargeState) {
-        res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
+    var vehicles = session.get("vehicles");
+    var options = session.get("options");
+
+    // ensure we have a safe default
+    options.vehicleID = vehicles[0].id_s;
+
+    if (!carName) {
+        return options;
+    } else {
+        // find closest vehicle name
+        var maxDist = 100;  // some big number
+        
+        for (var i = 0; i < vehicles.length; i++) {
+            if (vehicles[i].display_name) {
+                var dist = new Levenshtein(carName, vehicles[i].display_name).distance;
+                if (dist < maxDist) {
+                    maxDist = dist;
+                    options.vehicleID = vehicles[i].id_s;
+                    options.display_name = vehicles[i].display_name;
+                }
+            }
+        }
+        return options;
+    }
+}
+
+//
+//
+//
+function getVehiclesFromToken(session, authToken) {
+    console.log("getVehiclesFromToken()");
+
+    authToken = authToken || token;
+
+    var options = {authToken: authToken};
+
+    return tjs.allVehiclesAsync(options)
+    .then(function(vehicles) {
+        vehicles[1] = {};
+        vehicles[1].id_s = "656623481448453599";
+        vehicles[1].display_name = "Tessie";
+
+        session.set("vehicles", vehicles);
+        session.set("options", options);
+    });
+}
+
+//
+//
+//
+app.intent('BatteryIntent', {
+    "slots": { "carName": "CAR_NAME"},
+    "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}', '{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc} for {-|carName}']
+}, function(req, res ){
+    var session = req.getSession();
+
+    // get car name if it was provided
+    var carName = req.slot("carName");
+
+    getVehiclesFromToken(session, req.sessionDetails.accessToken)
+    .done(function() {
+        console.log("done clause");
+
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
+        console.log(options);
+
+        tjs.chargeStateAsync(options)
+        .done(function(chargeState) {
+            if (options.display_name) {
+                res.say(options.display_name + "'s battery level is " + Math.round(chargeState.battery_level) + "%").send();
+            } else {
+                res.say("The battery level is " + Math.round(chargeState.battery_level) + "%").send();
+            }
+        });
     });
 
     // signal that we will send the response asynchronously    
