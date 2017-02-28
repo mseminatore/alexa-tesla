@@ -1,6 +1,8 @@
 # Alexa-Tesla
 [![Version](http://img.shields.io/npm/v/alexa-tesla.png)](https://www.npmjs.org/package/alexa-tesla)
-[![License](https://img.shields.io/npm/l/alexa-tesla.svg)](https://github.com/mseminatore/alexa-esla/blob/master/LICENSE)
+[![License](https://img.shields.io/npm/l/alexa-tesla.svg)](https://github.com/mseminatore/alexa-tesla/blob/master/LICENSE)
+[![Dependencies](https://david-dm.org/mseminatore/alexa-tesla.svg)](https://david-dm.org/mseminatore/alexa-tesla)
+[![Downloads](https://img.shields.io/npm/dt/alexa-tesla.svg)](https://www.npmjs.org/package/alexa-tesla)
 
 Monitoring and control of Tesla vehicles using Amazon Echo devices using the Alexa Skills Kit (ASK).
 
