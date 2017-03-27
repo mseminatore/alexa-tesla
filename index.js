@@ -2,6 +2,7 @@
 
 //var _ = require('lodash');
 //var request = require('request');
+
 var tjs = require("teslajs");
 var Alexa = require('alexa-app');
 var Levenshtein = require('levenshtein');
@@ -102,6 +103,74 @@ app.pre = function(request, response, type) {
 };
 
 //
+// See if we already have an established session and vehicle information
+// if not then acquire vehicles and options information
+//
+function checkSigninAsync(req) {
+    var session = req.getSession();
+    var vehicles = session.get("vehicles");
+    var options = session.get("options");
+
+    // if we already have vehicles and options then the promise is fulfilled
+    if (vehicles && options) {
+        log("Found existing vehicle session info");
+        return new Promise(function (fulfill, reject) {
+            fulfill(vehicles);
+        });
+    } else {
+        // otherwise we need to get the vehicle information
+        log("No existing session info found!");
+
+        // if user/pass provided then login
+        if (username && password) {
+            log("username/pwd found");
+
+            return tjs.loginAsync(username, password)
+            .then(function(result) {
+                options = {authToken: result.authToken};
+                return tjs.allVehiclesAsync(options);
+            })
+            .then(function(vehicles) {
+                options.vehicleID = vehicles[0].id_s;
+                session.set("vehicles", vehicles);
+                session.set("options", options);
+                return vehicles;
+            });
+        } else if (token) {
+            // if token found in ENV then use it
+            log("OAuth token found in process ENV");
+
+            options = {authToken: token};
+
+            return tjs.allVehiclesAsync(options)
+            .then(function(vehicles) {
+                options.vehicleID = vehicles[0].id_s;
+                session.set("vehicles", vehicles);
+                session.set("options", options);
+                return vehicles;
+            });
+        } else if (req.sessionDetails.accessToken) {
+            log("OAuth token passed by Alexa");
+
+            options = {authToken: req.sessionDetails.accessToken};
+
+            return tjs.allVehiclesAsync(options)
+            .then(function(vehicles) {
+                options.vehicleID = vehicles[0].id_s;
+                session.set("vehicles", vehicles);
+                session.set("options", options);
+                return vehicles;
+            });
+        } else {
+            // promise fails with error response!
+            return new Promise(function (fulfill, reject) {
+                reject("No login or token found!");
+            });
+        }
+    }
+}
+
+//
 //
 //
 app.launch(function(req, res) {
@@ -111,63 +180,19 @@ app.launch(function(req, res) {
     var session = req.getSession();
     var options = {};
 
-    // if user/pass provided then login
-    if (username && password) {
-        log("username/pwd found");
-
-        tjs.loginAsync(username, password)
-        .then(function(result) {
-            options = {authToken: result.authToken};
-            return tjs.vehiclesAsync(options);
-        })
-        .done(function(vehicle) {
-            session.set("vehicle", vehicle);
-            session.set("options", options);
-
+    checkSigninAsync(req)
+    .then(
+        function(vehicles) {
+            log("signin succeeded");
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
-        });
-        
-        return false;
-    }
-    
-    // if token found in ENV then use it
-    if (token) {
-        log("OAuth token found in process ENV");
-
-        options = {authToken: token};
-
-        tjs.vehiclesAsync(options)
-        .done(function(vehicle) {
-            session.set("vehicle", vehicle);
-            session.set("options", options);
-
-            res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
-        });
-        
-        return false;
-    }
-    
-    // if token passed in request then use that otherwise use account linking
-    if (req.sessionDetails.accessToken) {
-        log("OAuth token passed by Alexa");
-//        log(req.sessionDetails.accessToken);
-
-        options = {authToken: req.sessionDetails.accessToken};
-
-        tjs.vehiclesAsync(options)
-        .done(function(vehicle) {
-            session.set("vehicle", vehicle);
-            session.set("options", options);
-
-            res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
-        });
-
-        return false;        
-    }
-
-    // must link accounts
-    log("Account linking required");
-    res.linkAccount();
+        },
+        function(err) {
+            // must link accounts
+            log("Account linking required");
+            res.linkAccount();
+        }
+    );
+    return false;
 });
 
 //
@@ -176,38 +201,44 @@ app.launch(function(req, res) {
 app.intent('VehicleCountIntent', {
     "utterances": ['How many {cars|vehicles} do I {have|own}', 'to list my {cars|vehicles}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
+    checkSigninAsync(req)
+    .then(
+        function(vehicles) {
+            log("got vehicles: " + vehicles);
+            var options = req.getSession().get("options");
 
-    tjs.allVehiclesAsync(options)
-    .done(function(vehicles) {
-        var str = "I see that you have " + vehicles.length;
-        if (vehicles.length > 1) {
-            str += " vehicles. ";
-        } else {
-            str += " vehicle. ";
-        }
-
-        for (var i = 0; i < vehicles.length; i++) {
-            if (i === 0) {
-                str += "A ";
+            var str = "I see that you have " + vehicles.length;
+            if (vehicles.length > 1) {
+                str += " vehicles. ";
             } else {
-                str += " and a ";
+                str += " vehicle. ";
             }
 
-            var paintColor = tjs.getPaintColor(vehicles[i]);
-            if (paintColor) {
-                str += paintColor + " ";
-            }
+            for (var i = 0; i < vehicles.length; i++) {
+                if (i === 0) {
+                    str += "A ";
+                } else {
+                    str += " and a ";
+                }
 
-            str += tjs.getModel(vehicles[i]);
+                var paintColor = tjs.getPaintColor(vehicles[i]);
+                if (paintColor) {
+                    str += paintColor + " ";
+                }
 
-            if (vehicles[i].display_name) {
-                str += " called " + vehicles[i].display_name;
+                str += tjs.getModel(vehicles[i]);
+
+                if (vehicles[i].display_name) {
+                    str += " called " + vehicles[i].display_name;
+                }
             }
+            log(str);
+            res.say(str).send();
+        },
+        function(err) {
+            log("Error: " + err);
         }
-
-        res.say(str).send();
-    });
+    );
 
     // signal that we will send the response asynchronously    
     return false;
@@ -246,7 +277,7 @@ function getOptionsFromCarName(session, carName) {
 }
 
 //
-//
+// TODO - this could be checkSignin()
 //
 function getVehiclesFromToken(session, authToken) {
     console.log("getVehiclesFromToken()");
@@ -306,11 +337,14 @@ app.intent('BatteryIntent', {
 app.intent('RangeIntent', {
     "utterances": ['{What is|What\'s|For|To get} the range']
 }, function(req, res) {
-    var options = req.getSession().get("options");
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
 
-    tjs.chargeStateAsync(options)
-    .done(function(chargeState) {
-        res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+        tjs.chargeStateAsync(options)
+        .done(function(chargeState) {
+            res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
