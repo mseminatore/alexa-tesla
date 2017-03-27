@@ -54,10 +54,15 @@ AWS Lambda function to provide either:
 1. Two environment variables called `USER` and `PASS` which contain your Tesla.com credentials.
 2. OR one environment variable called `TOKEN` which contains a valid Tesla.com OAuth token [**Recommended**]
 
->Note that environment variables are case sensitive.  I was caught by this several times during development!
+> Note that environment variables are case sensitive!  I was caught by this 
+> several times during development!
 
-While using option #1 above works it is far less secure to use your login credentials.  Unlike logon credentials
-an OAuth token will eventually expire, and can be revoked at any time by changing your account password.  Additionally using the username and password requires an extra call on each skill invocation to acquire a new OAuth token.  These calls not only put undue load on the Tesla servers but they are also relatively slow.
+While using option #1 above works it is far less secure to use your login 
+credentials.  Unlike logon credentials an OAuth token will eventually expire,
+and can be revoked at any time by changing your account password.  
+Additionally using the username and password requires an extra call on each
+skill invocation to acquire a new OAuth token.  These calls not only put undue 
+load on the Tesla servers but they are also relatively slow.
 
 # Testing
 
@@ -87,6 +92,7 @@ Here are some of the most recent features and fixes:
 1. In **0.0.10** added support for **charge time remaining** and **listing vehicles**
 2. In **0.0.12** added **valet mode** and **reset valet pin** intents and simplified utterances using Amazon custom types
 3. In **0.0.13** added **climate settings** intent
+4. In **1.0.0** added beginnings of mult-car support and fixed issue with intens failing without launch
 
 # Intents
 

@@ -149,11 +149,11 @@ function checkSigninAsync(req) {
                 options.vehicleID = vehicles[0].id_s;
                 
                 // For testing multi-car when you only have one car
-
+/*
                 vehicles[1] = {};
                 vehicles[1].id_s = vehicles[0].id_s;
                 vehicles[1].display_name = "Tessie";
-                
+*/                
                 session.set("vehicles", vehicles);
                 session.set("options", options);
                 return vehicles;
