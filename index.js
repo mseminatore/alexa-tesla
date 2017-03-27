@@ -357,17 +357,20 @@ app.intent('RangeIntent', {
 app.intent('PluggedInIntent', {
     "utterances": ['{If|whether} {|the|my} car is plugged in']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.chargeStateAsync(options)
-    .done(function(chargeState) {
-        var str = "";
-        if (chargeState.charging_state != "Disconnected") {
-            str = "The car is plugged in.";
-        } else {
-            str = "The car is not plugged in.";
-        }
-        res.say(str).send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.chargeStateAsync(options)
+        .done(function(chargeState) {
+            var str = "";
+            if (chargeState.charging_state != "Disconnected") {
+                str = "The car is plugged in.";
+            } else {
+                str = "The car is not plugged in.";
+            }
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -380,11 +383,14 @@ app.intent('PluggedInIntent', {
 app.intent('StartChargeIntent', {
     "utterances": ['{to|} {start charging|charge}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.startChargeAsync(options)
-    .done(function(result) {
-        res.say("Charging has begun").send();
+    checkSigninAsync(req)
+    .then( function (vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.startChargeAsync(options)
+        .done(function(result) {
+            res.say("Charging has begun").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -397,11 +403,14 @@ app.intent('StartChargeIntent', {
 app.intent('StopChargeIntent', {
     "utterances": ['{to|} stop charging']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.stopChargeAsync(options)
-    .done(function(result) {
-        res.say("Charging has stopped").send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.stopChargeAsync(options)
+        .done(function(result) {
+            res.say("Charging has stopped").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -414,11 +423,14 @@ app.intent('StopChargeIntent', {
 app.intent('climateStartIntent', {
     "utterances": ['{to|} start {climate|cooling|heating|warming}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.climateStartAsync(options)
-    .done(function(result) {
-        res.say("Climate system is now on").send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.climateStartAsync(options)
+        .done(function(result) {
+            res.say("Climate system is now on").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -431,11 +443,14 @@ app.intent('climateStartIntent', {
 app.intent('climateStopIntent', {
     "utterances": ['{to|} stop {climate|cooling|heating|warming}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.climateStopAsync(options)
-    .done(function(result) {
-        res.say("Climate system is now off").send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.climateStopAsync(options)
+        .done(function(result) {
+            res.say("Climate system is now off").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -452,12 +467,15 @@ app.intent('setTempsIntent', {
     var temp = req.slot("number");
     // TODO - clamp temp here?
 
-    var options = req.getSession().get("options");
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
 
-    tjs.setTempsAsync(options, f2c(temp), null)
-    .done(function(result) {
-        var str = "The temperature is now set to " + temp + " degrees";
-        res.say(str).send();
+        tjs.setTempsAsync(options, f2c(temp), null)
+        .done(function(result) {
+            var str = "The temperature is now set to " + temp + " degrees";
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -470,20 +488,23 @@ app.intent('setTempsIntent', {
 app.intent('climateSettingIntent', {
     "utterances": ['{What are|For|To get} the climate settings']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.climateStateAsync(options)
-    .done(function(climate_state) {
-        var state = climate_state.is_auto_conditioning_on ? "on" : "off";
-        var str = "The climate system is currently " + state + ". ";
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
         
-        if (climate_state.driver_temp_setting != climate_state.passenger_temp_setting ) {
-            str += "The driver temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees ";
-            str += "and the passenger temperature is set to " + Math.round(c2f(climate_state.passenger_temp_setting)) + " degrees.";
-        } else {
-            str += "The temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees.";
-        }
-        res.say(str).send();
+        tjs.climateStateAsync(options)
+        .done(function(climate_state) {
+            var state = climate_state.is_auto_conditioning_on ? "on" : "off";
+            var str = "The climate system is currently " + state + ". ";
+            
+            if (climate_state.driver_temp_setting != climate_state.passenger_temp_setting ) {
+                str += "The driver temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees ";
+                str += "and the passenger temperature is set to " + Math.round(c2f(climate_state.passenger_temp_setting)) + " degrees.";
+            } else {
+                str += "The temperature is set to " + Math.round(c2f(climate_state.driver_temp_setting)) + " degrees.";
+            }
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -496,11 +517,14 @@ app.intent('climateSettingIntent', {
 app.intent('BeepIntent', {
     "utterances": ['{to|} {beep|honk} {the horn|}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.honkHornAsync(options)
-    .done(function(result) {
-        res.say("Beep Beep did you hear it?").send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.honkHornAsync(options)
+        .done(function(result) {
+            res.say("Beep Beep did you hear it?").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -513,11 +537,14 @@ app.intent('BeepIntent', {
 app.intent('FlashIntent', {
     "utterances": ['{to|} flash {the lights|}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.flashLightsAsync(options)
-    .done(function(result) {
-        res.say("Don't blink or you might miss it?").send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.flashLightsAsync(options)
+        .done(function(result) {
+            res.say("Don't blink or you might miss it?").send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -532,22 +559,26 @@ app.intent('LockIntent', {
     "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']
 }, function(req, res) {
     var state = req.slot("state");
-    var options = req.getSession().get("options");
 
-    if (state == 'lock') {
-        tjs.doorLockAsync(options)
-        .done(function(result) {
-            res.say("The doors are now locked.").send();
-        });
-    } else if (state == 'unlock') {
-        tjs.doorUnlockAsync(options)
-        .done(function(result) {
-            res.say("The doors are now unlocked.").send();
-        });
-    } else {
-        res.say("Unknown request");
-        return true;
-    }
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+
+        if (state == 'lock') {
+            tjs.doorLockAsync(options)
+            .done(function(result) {
+                res.say("The doors are now locked.").send();
+            });
+        } else if (state == 'unlock') {
+            tjs.doorUnlockAsync(options)
+            .done(function(result) {
+                res.say("The doors are now unlocked.").send();
+            });
+        } else {
+            res.say("Unknown request");
+            return true;
+        }
+    });
 
     // signal that we will send the response asynchronously    
     return false;
@@ -560,22 +591,25 @@ app.intent('ValetIntent', {
     "slots": { "onoff": "ONOFF" , "pin": "AMAZON.FOUR_DIGIT_NUMBER"},
     "utterances": ['{|to} {Turn|Set} valet mode {-|onoff} {-|pin}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    var onoff = req.slot("onoff");
-    var pin = req.slot("pin");
-    var mode = false;
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        var onoff = req.slot("onoff");
+        var pin = req.slot("pin");
+        var mode = false;
 
-    if (onoff.toUpperCase() == "ON") {
-        mode = true;
-    } else {
-        mode = false;
-    }
+        if (onoff.toUpperCase() == "ON") {
+            mode = true;
+        } else {
+            mode = false;
+        }
 
-    tjs.setValetModeAsync(options, mode, pin)
-    .done(function(result) {
-        var str = "Valet mode is now " + onoff;
-        res.say(str).send();
+        tjs.setValetModeAsync(options, mode, pin)
+        .done(function(result) {
+            var str = "Valet mode is now " + onoff;
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -588,12 +622,15 @@ app.intent('ValetIntent', {
 app.intent('ResetValetPinIntent', {
     "utterances": ['{|to} reset {|the} valet pin']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.resetValetPinAsync(options)
-    .done(function(result) {
-        var str = "The valet pin has been reset.";
-        res.say(str).send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.resetValetPinAsync(options)
+        .done(function(result) {
+            var str = "The valet pin has been reset.";
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -606,12 +643,15 @@ app.intent('ResetValetPinIntent', {
 app.intent('OdoIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} {odometer|mileage}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.vehicleStateAsync(options)
-    .done(function(vehicleState) {
-        var str = "The odometer reports " + Math.round(vehicleState.odometer) + " miles";
-        res.say(str).send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.vehicleStateAsync(options)
+        .done(function(vehicleState) {
+            var str = "The odometer reports " + Math.round(vehicleState.odometer) + " miles";
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -624,12 +664,15 @@ app.intent('OdoIntent', {
 app.intent('ChargeQueryIntent', {
     "utterances": ['{|What is|What\'s|For|To get} {the|} charge {|level|limit|setting}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.chargeStateAsync(options)
-    .done(function(chargeState) {
-        var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
-        res.say(str).send();
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.chargeStateAsync(options)
+        .done(function(chargeState) {
+            var str = "The charge limit is currently set to " + chargeState.charge_limit_soc + "%";
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -642,30 +685,33 @@ app.intent('ChargeQueryIntent', {
 app.intent('ChargeTimeIntent', {
     "utterances": ['How {long|much time} until {charge|charging} {is done|completes|finishes}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.chargeStateAsync(options)
-    .done(function(chargeState) {
-        if (chargeState.charging_state != "Charging") {
-            res.say("The car is not currently charging.").send();
-        } else {
-            var hours = Math.floor(chargeState.time_to_full_charge);
-            var mins = Math.round((chargeState.time_to_full_charge - hours) * 60);
-            var mph = Math.round(chargeState.charge_rate);
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.chargeStateAsync(options)
+        .done(function(chargeState) {
+            if (chargeState.charging_state != "Charging") {
+                res.say("The car is not currently charging.").send();
+            } else {
+                var hours = Math.floor(chargeState.time_to_full_charge);
+                var mins = Math.round((chargeState.time_to_full_charge - hours) * 60);
+                var mph = Math.round(chargeState.charge_rate);
 
-            var str = "The car is currently charging at a rate of " + mph.toString() + " miles per hour.  The estimated time to finish charging to " + chargeState.charge_limit_soc + "% is ";
-            if (hours > 0) {
-                str += hours.toString();
-                if (hours > 1) {
-                    str += " hours ";
-                } else {
-                    str += " hour ";
+                var str = "The car is currently charging at a rate of " + mph.toString() + " miles per hour.  The estimated time to finish charging to " + chargeState.charge_limit_soc + "% is ";
+                if (hours > 0) {
+                    str += hours.toString();
+                    if (hours > 1) {
+                        str += " hours ";
+                    } else {
+                        str += " hour ";
+                    }
                 }
-            }
 
-            str += mins.toString() + " minutes.";
-            res.say(str).send();
-        }
+                str += mins.toString() + " minutes.";
+                res.say(str).send();
+            }
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -679,39 +725,42 @@ app.intent('ChargeLimitIntent', {
     "slots": { "number": "AMAZON.NUMBER", "preset": "CHARGE_PRESETS" },
     "utterances": ['{to|} set {the|} charge {limit|level} to {-|number}', '{to|} set {the|} charge {limit|level} to {-|preset}']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    var limit = req.slot("number");
-    var preset = req.slot("preset");
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        var limit = req.slot("number");
+        var preset = req.slot("preset");
 
-    // translate preset values to percentages
-    if (preset) {
-        if (preset.toLowerCase() == "standard") {
+        // translate preset values to percentages
+        if (preset) {
+            if (preset.toLowerCase() == "standard") {
+                limit = 90;
+            } else if (preset.toLowerCase() == "range") {
+                limit = 100;
+            } else if (preset.toLowerCase() == "storage") {
+                limit = 50;
+            }
+        }
+
+        // make sure we have a valid limit
+        if (!limit) {
             limit = 90;
-        } else if (preset.toLowerCase() == "range") {
-            limit = 100;
-        } else if (preset.toLowerCase() == "storage") {
+        }
+
+        // clamp the limit to acceptable values
+        if (limit < 50) {
             limit = 50;
         }
-    }
+        if (limit > 100) {
+            limit = 100;
+        }
 
-    // make sure we have a valid limit
-    if (!limit) {
-        limit = 90;
-    }
-
-    // clamp the limit to acceptable values
-    if (limit < 50) {
-        limit = 50;
-    }
-    if (limit > 100) {
-        limit = 100;
-    }
-
-    tjs.setChargeLimitAsync(options, limit)
-    .done(function(result) {
-        var str = "I've set the charge limit to " + limit + "%";
-        res.say(str).send();
+        tjs.setChargeLimitAsync(options, limit)
+        .done(function(result) {
+            var str = "I've set the charge limit to " + limit + "%";
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
@@ -724,13 +773,15 @@ app.intent('ChargeLimitIntent', {
 app.intent('LocationIntent', {
     "utterances": ['{Where is|Where\'s} {the|my} car']
 }, function(req, res) {
-    var options = req.getSession().get("options");
-    
-    tjs.driveStateAsync(options)
-    .done(function(driveState) {
-        var state = driveState.shift_state || "Parked";
-        var str ="";
-        var dir = compassDirs(driveState.heading);
+    checkSigninAsync(req)
+    .then( function(vehicles) {
+        var options = req.getSession().get("options");
+        
+        tjs.driveStateAsync(options)
+        .done(function(driveState) {
+            var state = driveState.shift_state || "Parked";
+            var str ="";
+            var dir = compassDirs(driveState.heading);
 /*
         var lat = driveState.latitude || 0;
         var long = driveState.longitude || 0;
@@ -753,13 +804,14 @@ app.intent('LocationIntent', {
             res.say(str).send();
         });
 */
-        if (state == "Parked") {
-            str = "Car is parked facing " + dir;
-        } else {
-            str = "Car is traveling " + dir + " at " + Math.round(driveState.speed) + " miles per hour";
-        }
+            if (state == "Parked") {
+                str = "The car is parked facing " + dir;
+            } else {
+                str = "The car is traveling " + dir + " at " + Math.round(driveState.speed) + " miles per hour";
+            }
 
-        res.say(str).send();
+            res.say(str).send();
+        });
     });
 
     // signal that we will send the response asynchronously    
