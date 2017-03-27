@@ -291,7 +291,7 @@ function getOptionsFromCarName(session, carName) {
 //
 app.intent('BatteryIntent', {
     "slots": { "carName": "CAR_NAME"},
-    "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}', '{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc} for {-|carName}']
+    "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}', '{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc} of {-|carName}']
 }, function(req, res ) {
     var session = req.getSession();
 
