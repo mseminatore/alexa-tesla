@@ -523,7 +523,7 @@ app.intent('BeepIntent', {
         
         tjs.honkHornAsync(options)
         .done(function(result) {
-            res.say("Beep Beep did you hear it?").send();
+            res.say("<say-as interpret-as=\"interjection\">Beep beep!</say-as> Did you hear it?").send();
         });
     });
 
