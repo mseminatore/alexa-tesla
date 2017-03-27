@@ -60,7 +60,8 @@ AWS Lambda function to provide either:
 While using option #1 above works it is far less secure to use your login 
 credentials.  Unlike logon credentials an OAuth token will eventually expire,
 and can be revoked at any time by changing your account password.  
-Additionally using the username and password requires an extra call on each
+
+Additionally using the username and password can require an extra call on each
 skill invocation to acquire a new OAuth token.  These calls not only put undue 
 load on the Tesla servers but they are also relatively slow.
 
@@ -142,8 +143,11 @@ Some examples utterances are provided below:
 "[Alexa] ask Tesla..."
 
 * What is the battery level
+* for the battery level of [car_name]
 * What is the range
+* to get the range of [car_name]
 * If my car is plugged in
+* if [car_name] is plugged in
 * to start warming
 * to set temperature to 67
 * to beep the horn

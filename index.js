@@ -302,7 +302,6 @@ app.intent('BatteryIntent', {
     .then( function(vehicles) {
         // get options object - which must include authToken and vehicleID
         var options = getOptionsFromCarName(session, carName);
-        console.log(options);
 
         tjs.chargeStateAsync(options)
         .done(function(chargeState) {
@@ -322,15 +321,24 @@ app.intent('BatteryIntent', {
 //
 //
 app.intent('RangeIntent', {
-    "utterances": ['{What is|What\'s|For|To get} the range']
+    "slots": { "carName": "CAR_NAME"},
+    "utterances": ['{What is|What\'s|For|To get} the range', '{What is|What\'s|For|To get} the range of {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(req.session, carName);
 
         tjs.chargeStateAsync(options)
         .done(function(chargeState) {
-            res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+            if (options.display_name) {
+                res.say(options.display_name + "'s rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+            } else {
+                res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+            }
         });
     });
 
@@ -342,11 +350,15 @@ app.intent('RangeIntent', {
 // Check whether the car is plugged in or not
 //
 app.intent('PluggedInIntent', {
-    "utterances": ['{If|whether} {|the|my} car is plugged in']
+    "utterances": ['{If|whether} {|the|my} car is plugged in', '{If|whether} {-|carName} is plugged in']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(req.session, carName);
         
         tjs.chargeStateAsync(options)
         .done(function(chargeState) {
