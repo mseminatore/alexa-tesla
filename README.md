@@ -66,8 +66,10 @@ load on the Tesla servers but they are also relatively slow.
 
 # Testing
 
-In order to test this app locally you will need to install the Alexa-Server project.  
-_Instruction reference pending_.
+In order to test this app locally you will first need to install the 
+[Alexa-App-Server](https://github.com/alexa-js/alexa-app-server) project.  
+Then `git clone` or `npm install` alexa-tesla into the apps subfolder.
+_Additional instruction reference pending_.
 
 # Warranty Disclaimer
 
