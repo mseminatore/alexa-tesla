@@ -1,6 +1,6 @@
 {
   "name": "alexa-tesla",
-  "version": "0.0.15",
+  "version": "1.0.0",
   "description": "Tesla Skill for Alexa",
   "main": "index.js",
   "scripts": {
@@ -26,15 +26,16 @@
   "license": "MIT",
   "dependencies": {
     "alexa-app": "^3.0.0",
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "lodash": "^4.17.3",
-    "mocha": "^3.2.0",
-    "request": "^2.79.0",
-    "request-promise": "^4.1.1",
-    "teslajs": "^2.1.18"
+    "levenshtein": "^1.0.5",
+    "lodash": "^4.17.4",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0",
+    "teslajs": "^2.1.26"
   },
   "devDependencies": {
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.2.0"
   }
 }
