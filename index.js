@@ -131,6 +131,7 @@ function checkSigninAsync(req) {
                 return tjs.allVehiclesAsync(options);
             })
             .then(function(vehicles) {
+                // ensure we have a default vehicle
                 options.vehicleID = vehicles[0].id_s;
                 session.set("vehicles", vehicles);
                 session.set("options", options);
@@ -144,7 +145,15 @@ function checkSigninAsync(req) {
 
             return tjs.allVehiclesAsync(options)
             .then(function(vehicles) {
+                // ensure we have a default vehicle
                 options.vehicleID = vehicles[0].id_s;
+                
+                // For testing multi-car when you only have one car
+
+                vehicles[1] = {};
+                vehicles[1].id_s = vehicles[0].id_s;
+                vehicles[1].display_name = "Tessie";
+                
                 session.set("vehicles", vehicles);
                 session.set("options", options);
                 return vehicles;
@@ -156,6 +165,7 @@ function checkSigninAsync(req) {
 
             return tjs.allVehiclesAsync(options)
             .then(function(vehicles) {
+                // ensure we have a default vehicle
                 options.vehicleID = vehicles[0].id_s;
                 session.set("vehicles", vehicles);
                 session.set("options", options);
@@ -277,42 +287,19 @@ function getOptionsFromCarName(session, carName) {
 }
 
 //
-// TODO - this could be checkSignin()
-//
-function getVehiclesFromToken(session, authToken) {
-    console.log("getVehiclesFromToken()");
-
-    authToken = authToken || token;
-
-    var options = {authToken: authToken};
-
-    return tjs.allVehiclesAsync(options)
-    .then(function(vehicles) {
-        vehicles[1] = {};
-        vehicles[1].id_s = vehicles[0].id_s;
-        vehicles[1].display_name = "Tessie";
-
-        session.set("vehicles", vehicles);
-        session.set("options", options);
-    });
-}
-
-//
 //
 //
 app.intent('BatteryIntent', {
     "slots": { "carName": "CAR_NAME"},
     "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}', '{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc} for {-|carName}']
-}, function(req, res ){
+}, function(req, res ) {
     var session = req.getSession();
 
     // get car name if it was provided
     var carName = req.slot("carName");
 
-    getVehiclesFromToken(session, req.sessionDetails.accessToken)
-    .done(function() {
-        console.log("done clause");
-
+    checkSigninAsync(req)
+    .then( function(vehicles) {
         // get options object - which must include authToken and vehicleID
         var options = getOptionsFromCarName(session, carName);
         console.log(options);
