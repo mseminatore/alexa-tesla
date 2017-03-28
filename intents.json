@@ -1,36 +1,52 @@
 {
   "intents": [
     {
-      "intent": "VehicleCountIntent",
-      "slots": []
+      "intent": "VehicleCountIntent"
     },
     {
       "intent": "BatteryIntent",
-      "slots": []
+      "slots": [
+        {
+          "name": "carName",
+          "type": "CAR_NAME"
+        }
+      ]
     },
     {
       "intent": "RangeIntent",
-      "slots": []
+      "slots": [
+        {
+          "name": "carName",
+          "type": "CAR_NAME"
+        }
+      ]
     },
     {
       "intent": "PluggedInIntent",
-      "slots": []
+      "slots": [
+        {
+          "name": "carName",
+          "type": "CAR_NAME"
+        }
+      ]
     },
     {
       "intent": "StartChargeIntent",
-      "slots": []
+      "slots": [
+        {
+          "name": "carName",
+          "type": "CAR_NAME"
+        }
+      ]
     },
     {
-      "intent": "StopChargeIntent",
-      "slots": []
+      "intent": "StopChargeIntent"
     },
     {
-      "intent": "climateStartIntent",
-      "slots": []
+      "intent": "climateStartIntent"
     },
     {
-      "intent": "climateStopIntent",
-      "slots": []
+      "intent": "climateStopIntent"
     },
     {
       "intent": "setTempsIntent",
@@ -42,16 +58,13 @@
       ]
     },
     {
-      "intent": "climateSettingIntent",
-      "slots": []
+      "intent": "climateSettingIntent"
     },
     {
-      "intent": "BeepIntent",
-      "slots": []
+      "intent": "BeepIntent"
     },
     {
-      "intent": "FlashIntent",
-      "slots": []
+      "intent": "FlashIntent"
     },
     {
       "intent": "LockIntent",
@@ -76,20 +89,16 @@
       ]
     },
     {
-      "intent": "ResetValetPinIntent",
-      "slots": []
+      "intent": "ResetValetPinIntent"
     },
     {
-      "intent": "OdoIntent",
-      "slots": []
+      "intent": "OdoIntent"
     },
     {
-      "intent": "ChargeQueryIntent",
-      "slots": []
+      "intent": "ChargeQueryIntent"
     },
     {
-      "intent": "ChargeTimeIntent",
-      "slots": []
+      "intent": "ChargeTimeIntent"
     },
     {
       "intent": "ChargeLimitIntent",
@@ -105,8 +114,7 @@
       ]
     },
     {
-      "intent": "LocationIntent",
-      "slots": []
+      "intent": "LocationIntent"
     }
   ]
 }

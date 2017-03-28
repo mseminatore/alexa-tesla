@@ -293,10 +293,9 @@ app.intent('BatteryIntent', {
     "slots": { "carName": "CAR_NAME"},
     "utterances": ['{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc}', '{What is|What\'s|For|To get} {the|my} {battery level|charge|power|soc} of {-|carName}']
 }, function(req, res ) {
-    var session = req.getSession();
-
     // get car name if it was provided
     var carName = req.slot("carName");
+    var session = req.getSession();
 
     checkSigninAsync(req)
     .then( function(vehicles) {
@@ -326,18 +325,19 @@ app.intent('RangeIntent', {
 }, function(req, res) {
     // get car name if it was provided
     var carName = req.slot("carName");
+    var session = req.getSession();
 
     checkSigninAsync(req)
     .then( function(vehicles) {
         // get options object - which must include authToken and vehicleID
-        var options = getOptionsFromCarName(req.session, carName);
+        var options = getOptionsFromCarName(session, carName);
 
         tjs.chargeStateAsync(options)
         .done(function(chargeState) {
             if (options.display_name) {
-                res.say(options.display_name + "'s rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+                res.say(options.display_name + "'s rated range is " + Math.round(chargeState.battery_range) + " miles").send();
             } else {
-                res.say("The rated range left is " + Math.round(chargeState.battery_range) + " miles").send();
+                res.say("The rated range is " + Math.round(chargeState.battery_range) + " miles").send();
             }
         });
     });
@@ -350,23 +350,32 @@ app.intent('RangeIntent', {
 // Check whether the car is plugged in or not
 //
 app.intent('PluggedInIntent', {
+    "slots": { "carName": "CAR_NAME"},
     "utterances": ['{If|whether} {|the|my} car is plugged in', '{If|whether} {-|carName} is plugged in']
 }, function(req, res) {
     // get car name if it was provided
     var carName = req.slot("carName");
+    var session = req.getSession();
 
     checkSigninAsync(req)
     .then( function(vehicles) {
         // get options object - which must include authToken and vehicleID
-        var options = getOptionsFromCarName(req.session, carName);
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.chargeStateAsync(options)
-        .done(function(chargeState) {
+        .done( function(chargeState) {
+            
             var str = "";
-            if (chargeState.charging_state != "Disconnected") {
-                str = "The car is plugged in.";
+            if (options.display_name) {
+                str = options.display_name;
             } else {
-                str = "The car is not plugged in.";
+                str = "The car";
+            }
+
+            if (chargeState.charging_state != "Disconnected") {
+                str += " is plugged in.";
+            } else {
+                str += " is not plugged in.";
             }
             res.say(str).send();
         });
@@ -380,15 +389,25 @@ app.intent('PluggedInIntent', {
 // Start charging the car
 //
 app.intent('StartChargeIntent', {
-    "utterances": ['{to|} {start charging|charge}']
+    "slots": { "carName": "CAR_NAME"},
+    "utterances": ['{to|} {start charging|charge}', '{to|} {start charging|charge} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+
     checkSigninAsync(req)
     .then( function (vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.startChargeAsync(options)
-        .done(function(result) {
-            res.say("Charging has begun").send();
+        .done( function(result) {
+            if (options.display_name) {
+                res.say(options.display_name + " has started charging.")
+            } else {
+                res.say("Charging has begun").send();
+            }
         });
     });
 

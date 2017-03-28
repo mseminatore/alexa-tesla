@@ -36,20 +36,62 @@ BatteryIntent	What is my soc
 BatteryIntent	What's my soc
 BatteryIntent	For my soc
 BatteryIntent	To get my soc
+BatteryIntent	What is the battery level of {carName}
+BatteryIntent	What's the battery level of {carName}
+BatteryIntent	For the battery level of {carName}
+BatteryIntent	To get the battery level of {carName}
+BatteryIntent	What is my battery level of {carName}
+BatteryIntent	What's my battery level of {carName}
+BatteryIntent	For my battery level of {carName}
+BatteryIntent	To get my battery level of {carName}
+BatteryIntent	What is the charge of {carName}
+BatteryIntent	What's the charge of {carName}
+BatteryIntent	For the charge of {carName}
+BatteryIntent	To get the charge of {carName}
+BatteryIntent	What is my charge of {carName}
+BatteryIntent	What's my charge of {carName}
+BatteryIntent	For my charge of {carName}
+BatteryIntent	To get my charge of {carName}
+BatteryIntent	What is the power of {carName}
+BatteryIntent	What's the power of {carName}
+BatteryIntent	For the power of {carName}
+BatteryIntent	To get the power of {carName}
+BatteryIntent	What is my power of {carName}
+BatteryIntent	What's my power of {carName}
+BatteryIntent	For my power of {carName}
+BatteryIntent	To get my power of {carName}
+BatteryIntent	What is the soc of {carName}
+BatteryIntent	What's the soc of {carName}
+BatteryIntent	For the soc of {carName}
+BatteryIntent	To get the soc of {carName}
+BatteryIntent	What is my soc of {carName}
+BatteryIntent	What's my soc of {carName}
+BatteryIntent	For my soc of {carName}
+BatteryIntent	To get my soc of {carName}
 RangeIntent	What is the range
 RangeIntent	What's the range
 RangeIntent	For the range
 RangeIntent	To get the range
+RangeIntent	What is the range of {carName}
+RangeIntent	What's the range of {carName}
+RangeIntent	For the range of {carName}
+RangeIntent	To get the range of {carName}
 PluggedInIntent	If car is plugged in
 PluggedInIntent	whether car is plugged in
 PluggedInIntent	If the car is plugged in
 PluggedInIntent	whether the car is plugged in
 PluggedInIntent	If my car is plugged in
 PluggedInIntent	whether my car is plugged in
+PluggedInIntent	If {carName} is plugged in
+PluggedInIntent	whether {carName} is plugged in
 StartChargeIntent	to start charging
 StartChargeIntent	start charging
 StartChargeIntent	to charge
 StartChargeIntent	charge
+StartChargeIntent	to start charging {carName}
+StartChargeIntent	start charging {carName}
+StartChargeIntent	to charge {carName}
+StartChargeIntent	charge {carName}
 StopChargeIntent	to stop charging
 StopChargeIntent	stop charging
 climateStartIntent	to start climate
@@ -201,9 +243,7 @@ ChargeLimitIntent	to set the charge level to {preset}
 ChargeLimitIntent	set the charge level to {preset}
 ChargeLimitIntent	to set charge level to {preset}
 ChargeLimitIntent	set charge level to {preset}
-LocationIntent	the car
 LocationIntent	Where is the car
 LocationIntent	Where's the car
-LocationIntent	my car
 LocationIntent	Where is my car
 LocationIntent	Where's my car
