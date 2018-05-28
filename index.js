@@ -199,6 +199,7 @@ app.launch(function(req, res) {
         function(err) {
             // must link accounts
             log("Account linking required");
+            res.say("Account linking is required.").send();
             res.linkAccount();
         }
     );
@@ -404,7 +405,7 @@ app.intent('StartChargeIntent', {
         tjs.startChargeAsync(options)
         .done( function(result) {
             if (options.display_name) {
-                res.say(options.display_name + " has started charging.")
+                res.say(options.display_name + " has started charging.").send();
             } else {
                 res.say("Charging has begun").send();
             }
@@ -419,15 +420,25 @@ app.intent('StartChargeIntent', {
 // Stop charging the car
 //
 app.intent('StopChargeIntent', {
-    "utterances": ['{to|} stop charging']
+    "slots": { "carName": "CAR_NAME"},
+    "utterances": ['{to|} stop charging', '{to|} stop charging {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.stopChargeAsync(options)
         .done(function(result) {
-            res.say("Charging has stopped").send();
+            if (options.display_name) {
+                res.say(options.display_name + " has stopped charging.").send();
+            } else {
+                res.say("Charging has stopped.").send();
+            }
         });
     });
 
@@ -439,15 +450,25 @@ app.intent('StopChargeIntent', {
 // Turn on the climate system
 //
 app.intent('climateStartIntent', {
-    "utterances": ['{to|} start {climate|cooling|heating|warming}']
+    "slots": { "carName": "CAR_NAME"},
+    "utterances": ['{to|} start {climate|cooling|heating|warming}', '{to|} start {climate|cooling|heating|warming} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.climateStartAsync(options)
         .done(function(result) {
-            res.say("Climate system is now on").send();
+            if (options.display_name) {
+                res.say(options.display_name + "'s climate system is now on.").send();
+            } else {
+                res.say("Climate system is now on.").send();
+            }
         });
     });
 
@@ -459,15 +480,25 @@ app.intent('climateStartIntent', {
 // Turn off the climate system
 //
 app.intent('climateStopIntent', {
-    "utterances": ['{to|} stop {climate|cooling|heating|warming}']
+    "slots": { "carName": "CAR_NAME" },
+    "utterances": ['{to|} stop {climate|cooling|heating|warming}', '{to|} stop {climate|cooling|heating|warming} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.climateStopAsync(options)
         .done(function(result) {
-            res.say("Climate system is now off").send();
+            if (options.display_name) {
+                res.say(options.display_name + "'s climate system is now off.").send();
+            } else {
+                res.say("Climate system is now off").send();
+            }
         });
     });
 
@@ -480,7 +511,7 @@ app.intent('climateStopIntent', {
 //
 app.intent('setTempsIntent', {
     "slots": { "number": "AMAZON.NUMBER"},
-    "utterances": ['{to|} set temperature to {-|number} {|degrees}']
+    "utterances": ['{to|} set {the|} temperature to {-|number} {|degrees}']
 }, function(req, res) {
     var temp = req.slot("number");
     // TODO - clamp temp here?
@@ -533,11 +564,17 @@ app.intent('climateSettingIntent', {
 // Honk the car horn
 //
 app.intent('BeepIntent', {
-    "utterances": ['{to|} {beep|honk} {the horn|}']
+    "slots": { "carName": "CAR_NAME" },
+    "utterances": ['{to|} {beep|honk} {the horn|}', '{to|} {beep|honk} {the horn of|} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+    
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.honkHornAsync(options)
         .done(function(result) {
@@ -553,15 +590,21 @@ app.intent('BeepIntent', {
 //
 //
 app.intent('FlashIntent', {
-    "utterances": ['{to|} flash {the lights|}']
+    "slots": { "carName": "CAR_NAME" },
+    "utterances": ['{to|} flash {the lights|}', '{to|} flash {the lights of|} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
+    
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+        // get options object - which must include authToken and vehicleID
+        var options = getOptionsFromCarName(session, carName);
         
         tjs.flashLightsAsync(options)
         .done(function(result) {
-            res.say("Don't blink or you might miss it?").send();
+            res.say("Don't blink or you might miss it!").send();
         });
     });
 
