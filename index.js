@@ -616,24 +616,36 @@ app.intent('FlashIntent', {
 //
 //
 app.intent('LockIntent', {
-    "slots": { "state": "LOCK_PRESETS" },
-    "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}']
+    "slots": { "state": "LOCK_PRESETS", "carName": "CAR_NAME" },
+    "utterances": ['{to|} {-|state} {|the|my} {door|doors|car}', 'to {-|state} {|the} |doors of} {-|carName}']
 }, function(req, res) {
+    // get car name if it was provided
+    var carName = req.slot("carName");
+    var session = req.getSession();
     var state = req.slot("state");
 
     checkSigninAsync(req)
     .then( function(vehicles) {
-        var options = req.getSession().get("options");
+         // get options object - which must include authToken and vehicleID
+         var options = getOptionsFromCarName(session, carName);
 
         if (state == 'lock') {
             tjs.doorLockAsync(options)
-            .done(function(result) {
-                res.say("The doors are now locked.").send();
+            .done(function(result) {            
+                if (options.display_name) {
+                    res.say(options.display_name + "'s doors are now locked.").send();
+                } else {
+                    res.say("The doors are now locked.").send();
+                }
             });
         } else if (state == 'unlock') {
             tjs.doorUnlockAsync(options)
             .done(function(result) {
-                res.say("The doors are now unlocked.").send();
+                if (options.display_name) {
+                    res.say(options.display_name + "'s doors are now unlocked.").send();
+                } else {
+                    res.say("The doors are now unlocked.").send();
+                }
             });
         } else {
             res.say("Unknown request");
