@@ -27,7 +27,7 @@
   "dependencies": {
     "alexa-app": "^3.0.0",
     "levenshtein": "^1.0.5",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
     "teslajs": "^2.1.26"
