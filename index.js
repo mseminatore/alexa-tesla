@@ -128,7 +128,7 @@ function checkSigninAsync(req) {
             return tjs.loginAsync(username, password)
             .then(function(result) {
                 options = {authToken: result.authToken};
-                return tjs.allVehiclesAsync(options);
+                return tjs.vehiclesAsync(options);
             })
             .then(function(vehicles) {
                 // ensure we have a default vehicle
@@ -143,7 +143,7 @@ function checkSigninAsync(req) {
 
             options = {authToken: token};
 
-            return tjs.allVehiclesAsync(options)
+            return tjs.vehiclesAsync(options)
             .then(function(vehicles) {
                 // ensure we have a default vehicle
                 options.vehicleID = vehicles[0].id_s;
@@ -163,8 +163,9 @@ function checkSigninAsync(req) {
 
             options = {authToken: req.sessionDetails.accessToken};
 
-            return tjs.allVehiclesAsync(options)
+            return tjs.vehiclesAsync(options)
             .then(function(vehicles) {
+                log("vehicles completed.");
                 // ensure we have a default vehicle
                 options.vehicleID = vehicles[0].id_s;
                 session.set("vehicles", vehicles);
@@ -197,6 +198,7 @@ app.launch(function(req, res) {
             res.say(prompt).reprompt(prompt).shouldEndSession(false).send();
         },
         function(err) {
+            log(err);
             // must link accounts
             log("Account linking required");
             res.say("Account linking is required.").send();
